@@ -54,7 +54,12 @@ def main():
     
     sample_id = typing_data.get('sample_id', args.sample_id)
     resistance = typing_data.get('resistance', {})
+    mlst = typing_data.get('mlst', {})
+    o_locus = typing_data.get('o_locus', {})
     lineage = lineage_data.get('lineage', {})
+
+    sequence_type = mlst.get('sequence_type', 'Unknown')
+    o_antigen = o_locus.get('o_type', 'Unknown')
     
     esbl = resistance.get('esbl', 'None')
     carbapenemase = resistance.get('carbapenemase', 'None')
@@ -108,6 +113,8 @@ Generated: {current_date}
 
 RESISTANCE ANALYSIS:
 ==================================================
+Sequence Type (ST): {sequence_type}
+O-antigen: {o_antigen}
 Resistance Status: {resistance_status}
 Resistance Score: {resistance_score}/3
 Number of Resistance Classes: {num_resistance_classes}
@@ -200,6 +207,8 @@ Clinical Significance: High - acquired resistance
 CLINICAL SUMMARY:
 ==============================
 Sample: {sample_id}
+Sequence Type (ST): {sequence_type}
+O-antigen: {o_antigen}
 Resistance Status: {resistance_status}
 Clinical Action: {clinical_action}
 Risk Level: {risk_level}
