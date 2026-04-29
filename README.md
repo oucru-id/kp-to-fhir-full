@@ -7,3 +7,7 @@ Please refer to our [full documentation](https://kp-pipeline-docs.readthedocs.io
 - Comprehensive typing: MLST, Capsule (K/O locus), wzi typing, virulence factor, and resistance gene detection using Kleborate
 - Clinical reporting: Generates FHIR-compliant reports and validation
 - Quality control: Integrated MultiQC reporting
+
+### v1.4.0
+- Added O-antigen as a FHIR Observation
+- Included Sequence Type (ST) and O-antigen in the text sample report
