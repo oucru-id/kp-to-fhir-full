@@ -119,7 +119,7 @@ def get_capsule_type_coding(capsule_type):
 
 def get_mlst_st_coding(sequence_type):
     return {
-        'system': 'http://pubmlst.org/klebsiella',
+        'system': 'http://kaptive.holtlab.net/mlst',
         'code': sequence_type.replace('ST', ''),
         'display': f'Klebsiella pneumoniae MLST {sequence_type}'
     }
@@ -651,6 +651,52 @@ def create_capsule_observation(file_sample_id, typing_data):
         "performer": [{"reference": "Organization/100007732"}]
     }
 
+def create_o_antigen_observation(file_sample_id, typing_data):
+    o_locus_info = typing_data.get('o_locus', {})
+    o_type = o_locus_info.get('o_type', 'Unknown')
+
+    if o_type in ['Unknown', 'NA', '-', '']:
+        return None
+
+    div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae O-antigen type {o_type}</div>"
+
+    return {
+        "resourceType": "Observation",
+        "id": sanitize_id(f"{file_sample_id}-o-antigen"),
+        "meta": {
+            "profile": ["http://hl7.org/fhir/StructureDefinition/Observation"],
+            "tag": [{"system": "http://terminology.kemkes.go.id/sp", "code": "genomics", "display": "Genomics"}]
+        },
+        "text": {
+            "status": "generated",
+            "div": div_text
+        },
+        "status": "final",
+        "category": [
+            {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "laboratory", "display": "Laboratory"}]},
+            {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0074", "code": "GE", "display": "Genetics"}]}
+        ],
+        "code": {
+            "coding": [{
+                "system": "http://loinc.org",
+                "code": "612-2",
+                "display": "Bacterial strain [Type] in Isolate by Bacteria subtyping"
+            }]
+        },
+        "valueCodeableConcept": {
+            "coding": [{
+                "system": "http://kaptive.holtlab.net/o-antigen",
+                "code": o_type,
+                "display": f"Klebsiella pneumoniae {o_type}"
+            }],
+            "text": o_type
+        },
+        "subject": {"reference": f"Patient/{file_sample_id}-patient"},
+        "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
+        "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
+        "performer": [{"reference": "Organization/100007732"}]
+    }
+
 def main():
     parser = argparse.ArgumentParser(description='Convert KP typing data to FHIR format')
     parser.add_argument('--input', required=True, help='Path to typing JSON file')
@@ -988,6 +1034,14 @@ def main():
             bundles[file_sample_id].append({
                 "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
                 "resource": capsule_obs
+            })
+            observation_count += 1
+
+        o_antigen_obs = create_o_antigen_observation(file_sample_id, typing_data)
+        if o_antigen_obs:
+            bundles[file_sample_id].append({
+                "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
+                "resource": o_antigen_obs
             })
             observation_count += 1
 
