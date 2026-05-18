@@ -9,6 +9,7 @@ process CREATE_FHIR {
     tuple val(sample_id), path(typing_json)
     path(lineage_files)
     path(cgmlst_matrix)
+    path(org_metadata)
 
     output:
     tuple val(sample_id), path("${sample_id}.fhir.json"), emit: fhir_output
@@ -30,6 +31,7 @@ process CREATE_FHIR {
         --sample_id ${sample_id} \\
         --output ${sample_id}.fhir.json \\
         --lineage_dir lineage_data/ \\
+        --organization_metadata ${org_metadata} \\
         ${cgmlst_arg}
 
     cat <<-END_VERSIONS > versions.yml
@@ -44,6 +46,7 @@ workflow FHIR {
     typing_ch
     lineage_ch
     cgmlst_ch
+    org_metadata_ch
 
     main:
 
@@ -53,7 +56,7 @@ workflow FHIR {
 
     cgmlst_file = cgmlst_ch.ifEmpty(file("NO_CGMLST"))
 
-    CREATE_FHIR(typing_ch, lineage_files, cgmlst_file)
+    CREATE_FHIR(typing_ch, lineage_files, cgmlst_file, org_metadata_ch)
 
     emit:
     fhir_output = CREATE_FHIR.out.fhir_output
