@@ -2,12 +2,6 @@
 
 nextflow.enable.dsl = 2
 
-log.info """
-    Klebsiella pneumoniae Resistance Gene Analysis Pipeline (v${params.version})
-    Developed by SPHERES-OUCRU ID
-    Documentation: https://kp-pipeline-docs.readthedocs.io/
-"""
-
 include { ILLUMINA }         from './workflows/illumina.nf'
 include { NANOPORE }         from './workflows/nanopore.nf'
 include { TYPING_ANALYSIS }  from './workflows/typing.nf'
@@ -20,6 +14,13 @@ include { UPLOAD_FHIR }      from './workflows/upload_fhir.nf'
 include { VERSIONS }         from './workflows/utils.nf'
 
 workflow {
+    
+log.info """
+    Klebsiella pneumoniae Resistance Gene Analysis Pipeline (v${params.version})
+    Developed by SPHERES-OUCRU ID
+    Documentation: https://kp-pipeline-docs.readthedocs.io/
+"""
+
     illumina_reads_ch = Channel
         .fromFilePairs("${params.reads_dir}/*_{1,2}_illumina.fastq.gz")
         .map { id, files -> tuple(id, files) }
@@ -59,21 +60,27 @@ workflow {
         typing_results.lineage_report
     )
 
+    org_metadata_ch = Channel.fromPath(params.organization_metadata, checkIfExists: false)
+        .first()
+
     fhir_results = FHIR(
         typing_results.typing_report,
         typing_results.lineage_report,
-        cgmlst_results
+        cgmlst_results,
+        org_metadata_ch
     )
 
-    clinical_metadata_ch = Channel.fromPath(params.clinical_metadata, checkIfExists: false)
-        .first() 
+    clinical_metadata_ch = Channel.fromPath(params.patient_metadata, checkIfExists: false)
+        .first()
 
-    merged_fhir = MERGE_CLINICAL_DATA(fhir_results.fhir_output.map { it -> it[1] }, clinical_metadata_ch)
+    practitioner_metadata_ch = Channel.fromPath(params.practitioner_metadata, checkIfExists: false)
+        .first()
+
+    merged_fhir = MERGE_CLINICAL_DATA(fhir_results.fhir_output.map { it -> it[1] }, clinical_metadata_ch, org_metadata_ch, practitioner_metadata_ch)
 
     validated_fhir = VALIDATE(merged_fhir.merged_fhir)
 
-    // Optional: Upload to FHIR server
-    // UPLOAD_FHIR(validated_fhir.validated_fhir)
+   UPLOAD_FHIR(validated_fhir.validated_fhir)
 
     VERSIONS()
 }
