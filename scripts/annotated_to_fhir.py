@@ -9,6 +9,7 @@ import uuid
 from collections import defaultdict
 import glob
 import re
+from clinical_metadata_parser import load_organization_metadata
 
 def debug_print(message):
     print(f"DEBUG: {message}", file=sys.stderr)
@@ -144,7 +145,7 @@ def get_susceptibility_interpretation(status):
             "text": "Susceptible"
         }
 
-def create_susceptibility_panel(file_sample_id, typing_data):
+def create_susceptibility_panel(file_sample_id, typing_data, org_id='unknown-org'):
     
     drug_status = {
         "Ampicillin": "Resistant",               
@@ -395,7 +396,7 @@ def create_susceptibility_panel(file_sample_id, typing_data):
         "subject": {"reference": f"Patient/{file_sample_id}-patient"},
         "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
         "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-        "performer": [{"reference": "Organization/100007732"}],
+        "performer": [{"reference": f"Organization/{org_id}"}],
         "interpretation": [{
             "coding": [{
                 "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
@@ -513,7 +514,7 @@ def load_cgmlst_data(cgmlst_file, sample_id):
         debug_print(f"Error parsing cgMLST: {e}")
     return None
 
-def create_mlst_observation(file_sample_id, typing_data):
+def create_mlst_observation(file_sample_id, typing_data, org_id='unknown-org'):
     mlst_info = typing_data.get('mlst', {})
     sequence_type = mlst_info.get('sequence_type', 'Unknown')
     
@@ -554,10 +555,10 @@ def create_mlst_observation(file_sample_id, typing_data):
         "subject": {"reference": f"Patient/{file_sample_id}-patient"},
         "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
         "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-        "performer": [{"reference": "Organization/100007732"}]
+        "performer": [{"reference": f"Organization/{org_id}"}]
     }
 
-def create_virulence_score_observation(file_sample_id, typing_data):
+def create_virulence_score_observation(file_sample_id, typing_data, org_id='unknown-org'):
     virulence_info = typing_data.get('virulence', {})
     virulence_score = virulence_info.get('virulence_score', '0')
     
@@ -601,12 +602,12 @@ def create_virulence_score_observation(file_sample_id, typing_data):
             "subject": {"reference": f"Patient/{file_sample_id}-patient"},
             "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
             "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-            "performer": [{"reference": "Organization/100007732"}]
+            "performer": [{"reference": f"Organization/{org_id}"}]
         }
     except ValueError:
         return None
 
-def create_capsule_observation(file_sample_id, typing_data):
+def create_capsule_observation(file_sample_id, typing_data, org_id='unknown-org'):
     capsule_info = typing_data.get('capsule', {})
     k_type = capsule_info.get('k_type', 'Unknown')
     
@@ -648,10 +649,10 @@ def create_capsule_observation(file_sample_id, typing_data):
         "subject": {"reference": f"Patient/{file_sample_id}-patient"},
         "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
         "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-        "performer": [{"reference": "Organization/100007732"}]
+        "performer": [{"reference": f"Organization/{org_id}"}]
     }
 
-def create_o_antigen_observation(file_sample_id, typing_data):
+def create_o_antigen_observation(file_sample_id, typing_data, org_id='unknown-org'):
     o_locus_info = typing_data.get('o_locus', {})
     o_type = o_locus_info.get('o_type', 'Unknown')
 
@@ -694,7 +695,7 @@ def create_o_antigen_observation(file_sample_id, typing_data):
         "subject": {"reference": f"Patient/{file_sample_id}-patient"},
         "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
         "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-        "performer": [{"reference": "Organization/100007732"}]
+        "performer": [{"reference": f"Organization/{org_id}"}]
     }
 
 def main():
@@ -704,8 +705,16 @@ def main():
     parser.add_argument('--output', required=True, help='Path to output FHIR JSON')
     parser.add_argument('--lineage_dir', help='Directory with lineage files')
     parser.add_argument('--cgmlst_file', help='Path to chewBBACA results_alleles.tsv')
+    parser.add_argument('--organization_metadata', help='Path to organization metadata CSV/Excel file')
     args = parser.parse_args()
-    
+
+    org_data = {}
+    if args.organization_metadata and os.path.exists(args.organization_metadata):
+        org_data = load_organization_metadata(args.organization_metadata)
+    else:
+        debug_print(f"Organization metadata not provided or not found: {args.organization_metadata}")
+    org_id = org_data.get('org_id', 'unknown-org')
+
     lineage_data = {}
     if args.lineage_dir:
         lineage_data = load_lineage_data(args.lineage_dir)
@@ -896,7 +905,7 @@ def main():
                         "subject": {"reference": f"Patient/{file_sample_id}-patient"},
                         "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
                         "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-                        "performer": [{"reference": "Organization/100007732"}],
+                        "performer": [{"reference": f"Organization/{org_id}"}],
                         "component": components
                     }
 
@@ -1000,7 +1009,7 @@ def main():
                     "subject": {"reference": f"Patient/{file_sample_id}-patient"},
                     "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
                     "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-                    "performer": [{"reference": "Organization/100007732"}],
+                    "performer": [{"reference": f"Organization/{org_id}"}],
                     "component": components
                 }
                 
@@ -1013,7 +1022,7 @@ def main():
             except Exception as e:
                 debug_print(f"Error creating susceptible observation: {e}")
         
-        mlst_obs = create_mlst_observation(file_sample_id, typing_data)
+        mlst_obs = create_mlst_observation(file_sample_id, typing_data, org_id)
         if mlst_obs:
             bundles[file_sample_id].append({
                 "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
@@ -1021,7 +1030,7 @@ def main():
             })
             observation_count += 1
             
-        virulence_obs = create_virulence_score_observation(file_sample_id, typing_data)
+        virulence_obs = create_virulence_score_observation(file_sample_id, typing_data, org_id)
         if virulence_obs:
             bundles[file_sample_id].append({
                 "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
@@ -1029,7 +1038,7 @@ def main():
             })
             observation_count += 1
 
-        capsule_obs = create_capsule_observation(file_sample_id, typing_data)
+        capsule_obs = create_capsule_observation(file_sample_id, typing_data, org_id)
         if capsule_obs:
             bundles[file_sample_id].append({
                 "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
@@ -1037,7 +1046,7 @@ def main():
             })
             observation_count += 1
 
-        o_antigen_obs = create_o_antigen_observation(file_sample_id, typing_data)
+        o_antigen_obs = create_o_antigen_observation(file_sample_id, typing_data, org_id)
         if o_antigen_obs:
             bundles[file_sample_id].append({
                 "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
@@ -1045,7 +1054,7 @@ def main():
             })
             observation_count += 1
 
-        susceptible_panel = create_susceptibility_panel(file_sample_id, typing_data)
+        susceptible_panel = create_susceptibility_panel(file_sample_id, typing_data, org_id)
         if susceptible_panel:
              bundles[file_sample_id].append({
                 "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
@@ -1090,7 +1099,7 @@ def main():
                     },
                     "subject": {"reference": f"Patient/{file_sample_id}-patient"},
                     "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
-                    "performer": [{"reference": "Organization/100007732"}],
+                    "performer": [{"reference": f"Organization/{org_id}"}],
                     "component": [
                         {
                             "code": {
@@ -1142,6 +1151,10 @@ def main():
                 }
                 
                 for locus, allele in cgmlst_info['alleles'].items():
+                    if allele.isdigit():
+                        comp_value = {"valueInteger": int(allele)}
+                    else:
+                        comp_value = {"valueString": allele}
                     cgmlst_obs['component'].append({
                         "code": {
                             "coding": [{
@@ -1150,7 +1163,7 @@ def main():
                                 "display": locus
                             }]
                         },
-                        "valueInteger": allele
+                        **comp_value
                     })
                 
                 bundles[file_sample_id].append({
