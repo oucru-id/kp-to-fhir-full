@@ -1,6 +1,6 @@
 # KP Genomics to FHIR Pipeline (KPtoFHIR)
 
-A platform-agnostic Nextflow pipeline for *Klebsiella pneumoniae* genomic analysis from raw sequencing data, producing HL7 FHIR R4 genomics bundles. [Full documentation](https://kp-pipeline-docs.readthedocs.io/)
+A platform-agnostic Nextflow pipeline for *Klebsiella pneumoniae* genomic analysis from raw sequencing data, producing HL7 FHIR R4 genomics bundles (IG v3.0.0). [Full documentation](https://kp-pipeline-docs.readthedocs.io/)
 
 ## Key Features
 
