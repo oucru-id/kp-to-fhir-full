@@ -7,7 +7,9 @@ import sys
 import os  
 from datetime import datetime, timezone
 from clinical_metadata_parser import load_clinical_metadata, find_matching_sample, get_clinical_value, load_organization_metadata, load_practitioner_metadata
+from kp_codes import PLASMID_OBSERVATION_CODES, PLASMID_ANALYSIS_CODE, PLASMID_CODE, GENOMIC_LOCATION_CODE, SEQUENCING_QC_CODE
 import base64
+import html
 import re
 
 def debug_print(message):
@@ -712,7 +714,7 @@ def classify_resistance_profile(observations):
         code_coding = obs.get('code', {}).get('coding', [{}])[0]
         code_val = code_coding.get('code', '')
         
-        if code_val in ['612-2', 'SP000678', 'SP000680', 'SP000682']:
+        if code_val in ['612-2', 'SP000678', 'SP000680', 'SP000682', SEQUENCING_QC_CODE] + PLASMID_OBSERVATION_CODES:
             continue
         
         if code_val == '29576-6':
@@ -1032,6 +1034,73 @@ def create_cgmlst_report(sample_id, observations, clinical_data=None, org_data=N
         ]
     }
 
+def get_component_value(component):
+    if 'valueString' in component:
+        return component['valueString']
+    if 'valueCodeableConcept' in component:
+        return component['valueCodeableConcept'].get('text', '')
+    if 'valueQuantity' in component:
+        quantity = component['valueQuantity']
+        return f"{quantity.get('value')} {quantity.get('unit', '')}".strip()
+    if 'valueInteger' in component:
+        return str(component['valueInteger'])
+    return ''
+
+def extract_plasmid_info(observations):
+    summary = None
+    plasmids = []
+    gene_locations = {}
+
+    for obs in observations:
+        code_val = obs.get('code', {}).get('coding', [{}])[0].get('code', '')
+        labelled = {c.get('code', {}).get('text', ''): get_component_value(c) for c in obs.get('component', [])}
+
+        if code_val == PLASMID_ANALYSIS_CODE:
+            summary = labelled
+        elif code_val == PLASMID_CODE:
+            plasmids.append({'replicons': obs.get('valueCodeableConcept', {}).get('text', ''), **labelled})
+        else:
+            gene = None
+            location = None
+            plasmid_labels = []
+            for component in obs.get('component', []):
+                coding = component.get('code', {}).get('coding', [{}])[0]
+                if 'Gene studied' in coding.get('display', '') and 'valueCodeableConcept' in component:
+                    gene = component['valueCodeableConcept'].get('text', '')
+                elif coding.get('code') == GENOMIC_LOCATION_CODE:
+                    location = component.get('valueCodeableConcept', {}).get('text', '')
+                elif component.get('code', {}).get('text') == 'Plasmid':
+                    plasmid_labels.append(component.get('valueString', ''))
+            if gene and location:
+                gene_locations[gene] = f"plasmid {', '.join(plasmid_labels)}" if plasmid_labels else location.lower()
+
+    return summary, plasmids, gene_locations
+
+def extract_qc_warnings(observations):
+    warnings = []
+    for obs in observations:
+        if obs.get('code', {}).get('coding', [{}])[0].get('code', '') == SEQUENCING_QC_CODE:
+            warnings.extend(c.get('valueString', '') for c in obs.get('component', [])
+                            if c.get('code', {}).get('text') == 'Quality warning')
+    return [w for w in warnings if w]
+
+def describe_plasmid_borne_genes(plasmids):
+    findings = []
+    for plasmid in plasmids:
+        replicons = plasmid.get('replicons', '')
+        if not replicons or replicons == 'Replicon not typed':
+            replicons = 'untyped'
+        mobility = plasmid.get('Predicted mobility', '')
+        cluster_id = plasmid.get('Plasmid cluster', '').split(' ')[0]
+        note = cluster_id
+        if plasmid.get('Analysis confidence', '').startswith('predicted'):
+            note += "; predicted from short-read assembly"
+        for label, kind in [('Carried carbapenemase genes', 'Carbapenemase'), ('Carried ESBL genes', 'ESBL')]:
+            if plasmid.get(label):
+                carrier = f"{mobility} {replicons}".strip()
+                findings.append((kind, f"{kind} {plasmid[label]} on {carrier} plasmid ({note})"))
+    return findings
+
 def create_diagnostic_report(sample_id, observations, clinical_data=None, org_data=None, practitioner_data=None):
     org_data          = org_data or {}
     practitioner_data = practitioner_data or {}
@@ -1051,8 +1120,17 @@ def create_diagnostic_report(sample_id, observations, clinical_data=None, org_da
         conclusion_parts.append(f"Capsule type: {capsule_type}")
     if virulence_score > 0:
         conclusion_parts.append(f"Virulence score: {virulence_score}")
-    
-    conclusion = ". ".join(conclusion_parts) + "."
+
+    plasmid_summary, plasmid_list, gene_location_labels = extract_plasmid_info(observations)
+    plasmid_findings = describe_plasmid_borne_genes(plasmid_list)
+    for kind, finding in plasmid_findings:
+        conclusion_parts.append(finding)
+
+    qc_warnings = extract_qc_warnings(observations)
+    if qc_warnings:
+        conclusion_parts.append(f"Quality warning: {'; '.join(qc_warnings)}; interpret these results with caution")
+
+    conclusion = ". ".join(part.rstrip('.') for part in conclusion_parts) + "."
     
     conclusion_codes = []
     resistance_coding = get_resistance_conclusion_coding(resistance_class)
@@ -1085,7 +1163,15 @@ def create_diagnostic_report(sample_id, observations, clinical_data=None, org_da
         conclusion_codes.append({
             "text": f"Capsule {capsule_type}"
         })
-    
+
+    for kind in sorted({kind for kind, finding in plasmid_findings}):
+        conclusion_codes.append({
+            "text": f"Plasmid-borne {kind.lower() if kind == 'Carbapenemase' else kind}"
+        })
+
+    if qc_warnings:
+        conclusion_codes.append({"text": "Sequencing quality warning"})
+
     if clinical_data:
         given_name = get_clinical_value(clinical_data, 'given_name', 'Unknown')
         family_name = get_clinical_value(clinical_data, 'family_name', 'Unknown')
@@ -1102,6 +1188,9 @@ def create_diagnostic_report(sample_id, observations, clinical_data=None, org_da
 <p><strong>Sample ID:</strong> {sample_id}</p>
 <p><strong>Report Date:</strong> {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
 <p><strong>Resistance Classification:</strong> {resistance_class}</p>"""
+
+    if qc_warnings:
+        html_content += f"<p><strong>Quality warning:</strong> {html.escape('; '.join(qc_warnings))}. Interpret these results with caution.</p>"
 
     if sequence_type:
         html_content += f"<p><strong>MLST Sequence Type:</strong> {sequence_type}</p>"
@@ -1141,15 +1230,33 @@ def create_diagnostic_report(sample_id, observations, clinical_data=None, org_da
         if resistance_genes:
             html_content += "<h2>Detected Resistance Genes</h2><ul>"
             for gene in sorted(set(resistance_genes)):
-                html_content += f"<li>{gene}</li>"
+                location = f" ({gene_location_labels[gene]})" if gene in gene_location_labels else ""
+                html_content += f"<li>{gene}{location}</li>"
             html_content += "</ul>"
-        
+
         if other_genes:
             html_content += "<h2>Other Genetic Features</h2><ul>"
             for gene in sorted(set(other_genes)):
-                html_content += f"<li>{gene}</li>"
+                location = f" ({gene_location_labels[gene]})" if gene in gene_location_labels else ""
+                html_content += f"<li>{gene}{location}</li>"
             html_content += "</ul>"
-    
+
+    if plasmid_summary is not None:
+        html_content += "<h2>Plasmid Content</h2>"
+        if plasmid_summary.get('Analysis status') == 'failed':
+            html_content += "<p>Plasmid analysis failed; plasmid content is unknown.</p>"
+        elif not plasmid_list:
+            html_content += "<p>No plasmids detected.</p>"
+        else:
+            html_content += "<table><tr><th>Cluster</th><th>Replicons</th><th>Size</th><th>Mobility</th><th>Resistance genes</th></tr>"
+            for plasmid in plasmid_list:
+                cells = [plasmid.get('Plasmid cluster'), plasmid.get('replicons'), plasmid.get('Plasmid size'),
+                         plasmid.get('Predicted mobility'), plasmid.get('Carried resistance genes')]
+                html_content += "<tr>" + "".join(f"<td>{html.escape(cell or '-', quote=False)}</td>" for cell in cells) + "</tr>"
+            html_content += "</table>"
+        if plasmid_summary.get('Analysis confidence'):
+            html_content += f"<p><em>Plasmid assignment confidence: {html.escape(plasmid_summary['Analysis confidence'], quote=False)}.</em></p>"
+
     if alleles:
         html_content += "<h2>MLST Allele Profile</h2><ul>"
         for allele, value in sorted(alleles.items()):

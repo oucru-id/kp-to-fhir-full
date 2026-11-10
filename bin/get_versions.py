@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 import importlib
 import subprocess
@@ -72,10 +73,14 @@ def main():
             print(f"  {p}: not_installed")
 
     print("system_tools:")
-    
+
+    mobsuite_env = os.environ.get('MOBSUITE_ENV') or os.path.expanduser('~/miniforge3/envs/mobsuite')
+    nanoplot_env = os.environ.get('NANOPLOT_ENV') or os.path.expanduser('~/miniforge3/envs/nanoplot')
+
     tools = {
         "fastp": ("fastp", "--version"),
         "fastqc": ("fastqc", "--version"),
+        "nanoplot": (os.path.join(nanoplot_env, 'bin', 'NanoPlot'), "--version"),
         "chopper": ("chopper", "--version"),  
         "megahit": ("megahit", "--version"),
         "spades": ("spades.py", "--version"), 
@@ -87,6 +92,7 @@ def main():
         "medaka": ("medaka", "--version"),   
         "kleborate": ("kleborate", "--version"),
         "chewBBACA": ("chewBBACA.py", "--version"),
+        "mob_suite": (os.path.join(mobsuite_env, 'bin', 'mob_recon'), "--version"),
         "multiqc": ("multiqc", "--version"),
         "java": ("java", "-version"),
     }

@@ -6,59 +6,51 @@ process CREATE_FHIR {
     publishDir "${params.results_dir}/fhir", mode: 'copy'
 
     input:
-    tuple val(sample_id), path(typing_json)
-    path(lineage_files)
+    tuple val(sample_id), path(typing_json), path(plasmid_json), path(qc_json)
     path(cgmlst_matrix)
     path(org_metadata)
 
     output:
     tuple val(sample_id), path("${sample_id}.fhir.json"), emit: fhir_output
-    path "versions.yml", emit: versions
 
     script:
     def cgmlst_arg = cgmlst_matrix.name != 'NO_CGMLST' ? "--cgmlst_file ${cgmlst_matrix}" : ""
+    def plasmid_arg = plasmid_json ? "--plasmid_json ${plasmid_json}" : ""
+    def qc_arg = qc_json ? "--qc_json ${qc_json}" : ""
     """
-    mkdir -p lineage_data
-    
-    for file in ${lineage_files}; do
-        if [ -f "\$file" ]; then
-            cp "\$file" lineage_data/
-        fi
-    done
-
-    python3 $baseDir/scripts/annotated_to_fhir.py \\
+    annotated_to_fhir.py \\
         --input ${typing_json} \\
         --sample_id ${sample_id} \\
         --output ${sample_id}.fhir.json \\
-        --lineage_dir lineage_data/ \\
         --organization_metadata ${org_metadata} \\
-        ${cgmlst_arg}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python3 --version | sed 's/Python //g')
-    END_VERSIONS
+        ${cgmlst_arg} \\
+        ${plasmid_arg} \\
+        ${qc_arg}
     """
 }
 
 workflow FHIR {
     take:
     typing_ch
-    lineage_ch
+    plasmid_ch
+    assembly_qc_ch      // Nanopore samples only
     cgmlst_ch
     org_metadata_ch
 
     main:
 
-    lineage_files = lineage_ch
-        .map { sample_id, lineage_file -> lineage_file }
-        .collect()
-
     cgmlst_file = cgmlst_ch.ifEmpty(file("NO_CGMLST"))
 
-    CREATE_FHIR(typing_ch, lineage_files, cgmlst_file, org_metadata_ch)
+    typing_with_extras = typing_ch
+        .join(plasmid_ch, remainder: true)
+        .join(assembly_qc_ch, remainder: true)
+        .filter { row -> row.size() > 1 && row[1] != null }
+        .map { row -> tuple(row[0], row[1],
+                            (row.size() > 2 && row[2]) ? row[2] : [],
+                            (row.size() > 3 && row[3]) ? row[3] : []) }
+
+    CREATE_FHIR(typing_with_extras, cgmlst_file, org_metadata_ch)
 
     emit:
     fhir_output = CREATE_FHIR.out.fhir_output
-    versions    = CREATE_FHIR.out.versions
 }

@@ -16,7 +16,7 @@ process UPLOAD_TO_FHIR {
     def token_file_arg = "--token_file '${projectDir}/data/access_token.json'"
     def api_key_arg    = params.api_key ? "--api_key '${params.api_key}'" : ""
     """
-    python3 ${projectDir}/scripts/upload_fhir.py \\
+    upload_fhir.py \\
         --fhir_file ${fhir_file} \\
         --fhir_server_url '${params.fhir_server_url}' \\
         ${token_file_arg} \\

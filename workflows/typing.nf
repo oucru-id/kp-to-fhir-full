@@ -10,7 +10,6 @@ process kleborate {
     
     output:
     tuple val(sample_id), path("${sample_id}_kleborate_full.txt"), emit: kleborate_report
-    path "versions.yml", emit: versions
     
     script:
     """
@@ -33,11 +32,6 @@ process kleborate {
             exit 1
         fi
     fi
-    
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        kleborate: \$(kleborate --version 2>&1 | sed 's/Kleborate v//')
-    END_VERSIONS
     """
 }
 
@@ -72,12 +66,14 @@ process parse_results {
     esbl_genes = []
     carbapenemases = []
     other_resistance = []
-    
+    resistance_score = "Unknown"
+
     k_locus = "Unknown"
     k_type = "Unknown" 
     o_locus = "Unknown"
     o_type = "Unknown"
     virulence_genes = {}
+    virulence_score = "Unknown"
     wzi = "Unknown"
     
     try:
@@ -174,20 +170,24 @@ process parse_results {
                     for col in bla_columns:
                         if col in row and row[col] not in ['-', '', '0', 'NA']:
                             genes = [g.strip() for g in row[col].split(';') if g.strip()]
+                            # Bla_chr = intrinsic chromosomal SHV/LEN/OKP. Kleborate's "^" marker only means
+                            # the protein matched exactly but the DNA did not, so it says nothing about origin.
+                            intrinsic = col.endswith('Bla_chr')
                             for gene in genes:
                                 resistance_genes.append({
                                     'gene': gene,
                                     'drug_class': 'beta-lactam',
                                     'identity': '100%',
-                                    'coverage': '100%'
+                                    'coverage': '100%',
+                                    'intrinsic': intrinsic
                                 })
                                 resistance_classes.add('beta-lactam')
-                                
+
                                 if 'ESBL' in col:
                                     esbl_genes.append(gene)
                                 elif 'Carb' in col:
                                     carbapenemases.append(gene)
-                                else:
+                                elif not intrinsic:
                                     other_resistance.append(gene)
                                                         
                     other_resistance_cols = [
@@ -223,22 +223,30 @@ process parse_results {
                     
                     point_mutations = []
                     mutation_columns = {
-                        'GyrA': ['klebsiella_pneumo_complex__amr__GyrA_mutations', 'GyrA_mutations'],
-                        'ParC': ['klebsiella_pneumo_complex__amr__ParC_mutations', 'ParC_mutations'],
-                        'OmpK35': ['klebsiella_pneumo_complex__amr__OmpK35_mutations', 'OmpK35_mutations'],
-                        'OmpK36': ['klebsiella_pneumo_complex__amr__OmpK36_mutations', 'OmpK36_mutations'],
+                        'Fluoroquinolone': ['klebsiella_pneumo_complex__amr__Flq_mutations', 'Flq_mutations'],
+                        'Porin': ['klebsiella_pneumo_complex__amr__Omp_mutations', 'Omp_mutations'],
                         'Colistin': ['klebsiella_pneumo_complex__amr__Col_mutations', 'Col_mutations']
                     }
+                    protein_names = {
+                        'gyra': 'GyrA', 'parc': 'ParC', 'ompk35': 'OmpK35', 'ompk36': 'OmpK36',
+                        'mgrb': 'MgrB', 'pmra': 'PmrA', 'pmrb': 'PmrB', 'phop': 'PhoP', 'phoq': 'PhoQ',
+                        'crra': 'CrrA', 'crrb': 'CrrB'
+                    }
 
-                    for gene_target, cols in mutation_columns.items():
+                    for mutation_class, cols in mutation_columns.items():
                         for col in cols:
                             if col in row and row[col] not in ['-', '', '0', 'NA', '']:
-                                # Kleborate separates mutations with ;
+                                # Kleborate separates mutations with ; e.g. "GyrA:p.Ser83Ile;ParC:p.Ser80Ile", "pmrb:p.Ala231fs", "OmpK36GD"
                                 muts = [m.strip() for m in row[col].split(';') if m.strip()]
                                 for mut in muts:
-                                    # Clean up mutation string (sometimes has gene name prefix)
+                                    gene_target = mutation_class
                                     clean_mut = mut
-                                    
+                                    for prefix, protein in protein_names.items():
+                                        if mut.lower().startswith(prefix):
+                                            gene_target = protein
+                                            clean_mut = mut[len(prefix):].lstrip(':').strip() or mut
+                                            break
+
                                     point_mutations.append({
                                         'gene': gene_target,
                                         'mutation': clean_mut,
@@ -291,28 +299,21 @@ process parse_results {
         import traceback
         traceback.print_exc()
     
-    if sequence_type != "Unknown" and sequence_type.replace('ST', '').replace('-', '').split('L')[0].isdigit():
-        st_number = sequence_type.replace('ST', '').replace('-', '').split('L')[0]  # Handle variants like ST258-1LV
-        st_to_cc = {
-            '11': 'CC11', '258': 'CC258', '147': 'CC147', '15': 'CC15',
-            '16': 'CC16', '23': 'CC23', '37': 'CC37', '101': 'CC101',
-            '14': 'CC14', '17': 'CC17', '20': 'CC20', '25': 'CC25',
-            '268': 'CC268', '392': 'CC392', '307': 'CC307', '67': 'CC67',
-            '91': 'CC91', '3067': 'CC3067'
-        }
-        clonal_complex = st_to_cc.get(st_number, f"CC{st_number}")
+    # Kleborate does not report clonal complexes, so only well-known ones are filled in. Locus variants
+    # (e.g. ST405-3LV), novel STs and STs missing from this table stay "Unknown" rather than an invented CC.
+    st_number = sequence_type[2:] if sequence_type.startswith('ST') and sequence_type[2:].isdigit() else None
+    st_to_cc = {
+        '258': 'CC258', '11': 'CC258', '512': 'CC258', '340': 'CC258', '437': 'CC258',
+        '147': 'CC147', '15': 'CC15', '16': 'CC16', '23': 'CC23', '37': 'CC37', '101': 'CC101',
+        '14': 'CC14', '17': 'CC17', '20': 'CC20', '25': 'CC25', '268': 'CC268', '392': 'CC392',
+        '307': 'CC307', '67': 'CC67', '91': 'CC91', '3067': 'CC3067'
+    }
+    if st_number:
+        clonal_complex = st_to_cc.get(st_number, 'Unknown')
     
     num_resistance_genes = len(resistance_genes)
     num_resistance_classes = len(resistance_classes)
-    
-    resistance_score = 0
-    if carbapenemases:
-        resistance_score = 3
-    elif esbl_genes:
-        resistance_score = 2
-    elif num_resistance_classes > 2:
-        resistance_score = 1
-    
+
     typing_result = {
         'sample_id': '${sample_id}',
         'assembly': '${sample_id}',
@@ -336,13 +337,15 @@ process parse_results {
             'salmochelin': virulence_genes.get('salmochelin', 'Unknown'),
             'hypermucoidy': virulence_genes.get('rmpadc', 'Unknown'),
             'rmpa2': virulence_genes.get('rmpa2', 'Unknown'),
-            'virulence_score': str(len([v for v in virulence_genes.values() if v != 'Unknown']))
+            # Kleborate's 0-5 score (ybt / clb / iuc combinations), not a count of virulence loci
+            'virulence_score': virulence_score
         },
         'resistance': {
             'acquired_resistance': ', '.join(other_resistance) if other_resistance else 'None',
             'esbl': ', '.join(esbl_genes) if esbl_genes else 'None', 
             'carbapenemase': ', '.join(carbapenemases) if carbapenemases else 'None',
             'other_resistance': ', '.join([r['gene'] for r in resistance_genes]),
+            # Kleborate's 0-3 score: 0 no ESBL/carbapenemase, 1 ESBL, 2 carbapenemase, 3 carbapenemase + colistin resistance
             'resistance_score': str(resistance_score),
             'num_resistance_classes': str(num_resistance_classes),
             'num_resistance_genes': str(num_resistance_genes),
@@ -399,5 +402,4 @@ workflow TYPING_ANALYSIS {
     emit:
     typing_report = typing_results.typing_report
     lineage_report = typing_results.lineage_report
-    versions = kleborate_out.versions
 }

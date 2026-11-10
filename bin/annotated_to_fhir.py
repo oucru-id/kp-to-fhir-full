@@ -7,46 +7,24 @@ import os
 import sys
 import uuid
 from collections import defaultdict
-import glob
 import re
+import html
 from clinical_metadata_parser import load_organization_metadata
+from kp_codes import (PLASMID_CODE_SYSTEM, PLASMID_ANALYSIS_CODE, PLASMID_CODE, GENOMIC_LOCATION_CODE,
+                      PLASMID_CODE_DISPLAYS, LOCATION_CODINGS,
+                      QC_CODE_SYSTEM, SEQUENCING_QC_CODE, SEQUENCING_QC_DISPLAY)
+
+# 'Colistin' is the class label older typing.json files used in place of the protein name
+COLISTIN_MUTATION_GENES = ['Colistin', 'MgrB', 'PhoP', 'PhoQ', 'PmrA', 'PmrB', 'CrrA', 'CrrB']
+
+# Kleborate writes drug classes as short codes (AGly_acquired -> 'agly')
+DRUG_CLASS_ALIASES = {
+    'agly': 'aminoglycoside', 'flq': 'fluoroquinolone', 'sul': 'sulfonamide',
+    'tmt': 'trimethoprim', 'col': 'colistin', 'tet': 'tetracycline'
+}
 
 def debug_print(message):
     print(f"DEBUG: {message}", file=sys.stderr)
-
-def load_lineage_data(lineage_dir):
-    lineage_data = {}
-    
-    if not lineage_dir or not os.path.exists(lineage_dir):
-        return lineage_data
-    
-    lineage_files = glob.glob(os.path.join(lineage_dir, "*.lineage.json"))
-    
-    for lineage_file in lineage_files:
-        try:
-            with open(lineage_file, 'r') as f:
-                lineage_info = json.load(f)
-                
-                sample_id = lineage_info.get('sample_id', 
-                    os.path.basename(lineage_file).replace('.lineage.json', ''))
-                
-                possible_ids = [
-                    sample_id,
-                    sample_id.replace('_ont.fastq', ''),
-                    sample_id.replace('_illumina', ''),
-                    sample_id.replace('.fastq', ''),
-                    sample_id.split('_')[0] if '_' in sample_id else sample_id,
-                    os.path.basename(lineage_file).replace('.lineage.json', '')
-                ]
-                
-                for pid in set(possible_ids):
-                    if pid:
-                        lineage_data[pid] = lineage_info
-                
-        except Exception as e:
-            continue
-    
-    return lineage_data
 
 def extract_sample_id_from_filename(filename):
     basename = os.path.basename(filename)
@@ -145,6 +123,12 @@ def get_susceptibility_interpretation(status):
             "text": "Susceptible"
         }
 
+def normalise_aminoglycoside_name(name):
+    # Kleborate mixes "aac(6')-Ib-cr.v2" and "aph3-Ia.v1"; drop the punctuation so both styles compare
+    for char in "()'^*?":
+        name = name.replace(char, '')
+    return name.lower().replace('_', '-').replace(' ', '-')
+
 def create_susceptibility_panel(file_sample_id, typing_data, org_id='unknown-org'):
     
     drug_status = {
@@ -227,34 +211,29 @@ def create_susceptibility_panel(file_sample_id, typing_data, org_id='unknown-org
     has_trimethoprim = False
     has_sulfonamide = False
     
+    # Longest key first, so aac3-iia is preferred over aac3-i
+    aminoglycoside_profiles = sorted(
+        ((normalise_aminoglycoside_name(name), profile) for name, profile in aminoglycoside_gene_mapping.items()),
+        key=lambda item: len(item[0]), reverse=True)
+
     for gene in detailed_resistance:
         gene_name = gene.get('gene', '').lower().replace('^', '').strip()
         drug_class = gene.get('drug_class', '').lower()
-        
-        if drug_class == 'aminoglycoside' or 'aminoglycoside' in drug_class:
-            gene_lookup = gene_name.lower().replace('_', '-').replace(' ', '-')
-            
-            matched = False
-            for known_gene, resistance_profile in aminoglycoside_gene_mapping.items():
-                if known_gene in gene_lookup or gene_lookup.startswith(known_gene.split('-')[0]):
-                    if resistance_profile.get('Gentamicin'):
-                        drug_status["Gentamicin"] = "Resistant"
-                    if resistance_profile.get('Amikacin'):
-                        drug_status["Amikacin"] = "Resistant"
-                    matched = True
-                    break
-            
-            if not matched:
-                rmt_genes = ['arma', 'rmta', 'rmtb', 'rmtc', 'rmtd', 'rmte', 'rmtf', 'rmtg', 'rmth', 'npma']
-                if any(rmt in gene_lookup for rmt in rmt_genes):
+        drug_class = DRUG_CLASS_ALIASES.get(drug_class, drug_class)
+
+        if 'aminoglycoside' in drug_class:
+            gene_lookup = normalise_aminoglycoside_name(gene_name)
+            resistance_profile = next((profile for name, profile in aminoglycoside_profiles
+                                       if gene_lookup.startswith(name)), None)
+
+            if resistance_profile is not None:
+                if resistance_profile.get('Gentamicin'):
                     drug_status["Gentamicin"] = "Resistant"
+                if resistance_profile.get('Amikacin'):
                     drug_status["Amikacin"] = "Resistant"
-                    matched = True
-            
-            if not matched:
-                if 'aac' in gene_lookup or 'ant' in gene_lookup or 'aph' in gene_lookup:
-                    drug_status["Gentamicin"] = "Resistant"
-                    debug_print(f"Unknown aminoglycoside gene {gene_name} - marking Gentamicin resistant (conservative)")
+            elif 'aac' in gene_lookup or 'ant' in gene_lookup or 'aph' in gene_lookup:
+                drug_status["Gentamicin"] = "Resistant"
+                debug_print(f"Unknown aminoglycoside gene {gene_name} - marking Gentamicin resistant (conservative)")
         
         if drug_class == 'fluoroquinolone' or 'qnr' in gene_name:
             has_flq_gene = True
@@ -283,7 +262,7 @@ def create_susceptibility_panel(file_sample_id, typing_data, org_id='unknown-org
         if gene == 'OmpK36':
             has_ompk36_mutation = True
             
-        if gene in ['MgrB', 'PhoP', 'PhoQ', 'PmrA', 'PmrB', 'CrrA', 'CrrB']:
+        if gene in COLISTIN_MUTATION_GENES:
             has_col_mutation = True
 
     if has_carb:
@@ -414,8 +393,8 @@ def sanitize_id(id_string):
     sanitized = sanitized.strip('-')
     return sanitized if sanitized else "unknown"
 
-def add_standard_kp_components(components, typing_data, sample_lineage_info):
-    
+def add_standard_kp_components(components, typing_data):
+
     virulence_info = typing_data.get('virulence', {})
 
     for vf_name, vf_value in virulence_info.items():
@@ -425,25 +404,7 @@ def add_standard_kp_components(components, typing_data, sample_lineage_info):
                 "valueString": vf_value
             })
 
-    if sample_lineage_info:
-        lineage = sample_lineage_info.get('lineage', {})
-        if isinstance(lineage, dict):
-            lineage_designation = lineage.get('lineage_designation', '')
-            high_risk_clone = lineage.get('high_risk_clone', '')
-            
-            if lineage_designation:
-                components.append({
-                    "code": {"text": "KP lineage designation"},
-                    "valueString": lineage_designation
-                })
-            
-            if high_risk_clone:
-                components.append({
-                    "code": {"text": "High risk clone"},
-                    "valueString": high_risk_clone
-                })
-
-def create_enhanced_annotation(gene, drug_class, typing_data, sample_lineage_info):
+def create_enhanced_annotation(gene, drug_class, typing_data, intrinsic=False):
     gene_info = {
         'SHV-1': 'narrow-spectrum β-lactamase',
         'CTX-M': 'ESBL family',
@@ -459,8 +420,9 @@ def create_enhanced_annotation(gene, drug_class, typing_data, sample_lineage_inf
     gene_description = gene_info.get(clean_gene, f'{drug_class} resistance gene')
     
     annotation = f"Resistance gene {gene} - {gene_description}"
-    if '^' in gene:
-        annotation += " (chromosomal)"
+    # merge_clinical_fhir.py leaves genes marked like this out of the resistance classification
+    if intrinsic:
+        annotation += " (intrinsic chromosomal)"
     
     mlst_info = typing_data.get('mlst', {})
     sequence_type = mlst_info.get('sequence_type', 'Unknown')
@@ -471,12 +433,7 @@ def create_enhanced_annotation(gene, drug_class, typing_data, sample_lineage_inf
         annotation += f" - KP MLST: {sequence_type}"
     if k_type not in ['Unknown', 'Capsule null']:
         annotation += f" - Capsule: {k_type}"
-    
-    if sample_lineage_info and isinstance(sample_lineage_info.get('lineage'), dict):
-        lineage_designation = sample_lineage_info['lineage'].get('lineage_designation', '')
-        if lineage_designation:
-            annotation += f" - Lineage: {lineage_designation}"
-    
+
     return annotation
 
 def load_cgmlst_data(cgmlst_file, sample_id):
@@ -517,14 +474,25 @@ def load_cgmlst_data(cgmlst_file, sample_id):
 def create_mlst_observation(file_sample_id, typing_data, org_id='unknown-org'):
     mlst_info = typing_data.get('mlst', {})
     sequence_type = mlst_info.get('sequence_type', 'Unknown')
-    
+    alleles = {locus: allele for locus, allele in mlst_info.get('alleles', {}).items()
+               if allele not in ['Unknown', '-', '', 'NA']}
+
     if sequence_type in ['Unknown', 'Undetermined', 'NA']:
-        return None
-        
-    st_coding = get_mlst_st_coding(sequence_type)
-    
-    div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae MLST {sequence_type}</div>"
-    
+        if not alleles:
+            return None
+        # keep the allele profile: "*" = inexact allele match, which is common in error-prone assemblies
+        if len(alleles) < 7 or any('*' in a or '?' in a for a in alleles.values()):
+            sequence_type = 'ST not determined (inexact or missing alleles)'
+        else:
+            sequence_type = 'Novel ST (new allele combination)'
+        st_value = {"text": sequence_type}
+    else:
+        st_value = {"coding": [get_mlst_st_coding(sequence_type)], "text": sequence_type}
+
+    allele_text = ', '.join(f"{locus} {allele}" for locus, allele in alleles.items())
+    div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae MLST {sequence_type}"
+    div_text += f". Alleles: {allele_text}</div>" if allele_text else "</div>"
+
     return {
         "resourceType": "Observation",
         "id": sanitize_id(f"{file_sample_id}-mlst"),
@@ -548,10 +516,10 @@ def create_mlst_observation(file_sample_id, typing_data, org_id='unknown-org'):
                 "display": "Bacterial strain [Type] in Isolate by Bacteria subtyping"
             }]
         },
-        "valueCodeableConcept": {
-            "coding": [st_coding],
-            "text": sequence_type
-        },
+        "valueCodeableConcept": st_value,
+        # merge_clinical_fhir.py reads these back as "MLST allele <locus>"
+        **({"component": [{"code": {"text": f"MLST allele {locus}"}, "valueString": allele}
+                          for locus, allele in alleles.items()]} if alleles else {}),
         "subject": {"reference": f"Patient/{file_sample_id}-patient"},
         "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
         "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
@@ -560,11 +528,9 @@ def create_mlst_observation(file_sample_id, typing_data, org_id='unknown-org'):
 
 def create_virulence_score_observation(file_sample_id, typing_data, org_id='unknown-org'):
     virulence_info = typing_data.get('virulence', {})
-    virulence_score = virulence_info.get('virulence_score', '0')
-    
-    if virulence_score == '0':
-        return None
-        
+    # a score of 0 is a result (no ybt, clb or iuc), so it is reported too
+    virulence_score = virulence_info.get('virulence_score', 'Unknown')
+
     try:
         score_value = int(virulence_score)
         div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">Virulence score: {score_value}</div>"
@@ -610,12 +576,23 @@ def create_virulence_score_observation(file_sample_id, typing_data, org_id='unkn
 def create_capsule_observation(file_sample_id, typing_data, org_id='unknown-org'):
     capsule_info = typing_data.get('capsule', {})
     k_type = capsule_info.get('k_type', 'Unknown')
-    
-    if k_type in ['Unknown', 'Capsule null', 'NA']:
+    k_locus = capsule_info.get('k_locus', 'Unknown')
+
+    if k_type in ['Unknown', 'NA'] and k_locus in ['Unknown', 'NA']:
         return None
-        
-    capsule_coding = get_capsule_type_coding(k_type)
-    
+
+    if k_type in ['Capsule null', 'Unknown', 'NA']:
+        # Kaptive found the locus but no capsule type: "Capsule null" means an essential gene is missing or truncated
+        phenotype = 'capsule null' if k_type == 'Capsule null' else 'type unknown'
+        k_type = f"{k_locus} ({phenotype})"
+        capsule_coding = {
+            'system': 'http://kaptive.holtlab.net/capsule',
+            'code': k_locus,
+            'display': f'Klebsiella capsule locus {k_locus} ({phenotype})'
+        }
+    else:
+        capsule_coding = get_capsule_type_coding(k_type)
+
     div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae capsule type {k_type}</div>"
     
     return {
@@ -698,14 +675,245 @@ def create_o_antigen_observation(file_sample_id, typing_data, org_id='unknown-or
         "performer": [{"reference": f"Organization/{org_id}"}]
     }
 
+def load_plasmid_data(plasmid_json):
+    if not plasmid_json:
+        return None
+    try:
+        with open(plasmid_json, 'r') as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError) as e:
+        debug_print(f"Could not read plasmid data {plasmid_json}: {e}")
+        return {"status": "failed", "plasmids": [], "gene_locations": {}}
+
+def plasmid_clusters_for(location_info):
+    clusters = []
+    for copy in location_info.get('copies', []):
+        cluster_id = copy.get('cluster_id')
+        if copy.get('molecule') == 'plasmid' and cluster_id and cluster_id not in clusters:
+            clusters.append(cluster_id)
+    return clusters
+
+def describe_plasmid(plasmid):
+    details = [', '.join(plasmid.get('replicon_types') or []) or 'replicon not typed']
+    if plasmid.get('predicted_mobility'):
+        details.append(plasmid['predicted_mobility'])
+    return f"{plasmid.get('cluster_id')} ({', '.join(details)})"
+
+def describe_location(location_info, plasmids_by_cluster):
+    # Never use the words "chromosomal" or "intrinsic" here: merge_clinical_fhir.py treats them as intrinsic genes.
+    location = location_info.get('location', 'unresolved')
+    if location == 'plasmid':
+        plasmids = [describe_plasmid(plasmids_by_cluster.get(c, {'cluster_id': c})) for c in plasmid_clusters_for(location_info)]
+        return f" - located on plasmid {'; '.join(plasmids)}"
+    if location == 'chromosome':
+        return " - located on chromosome"
+    return " - genomic location unresolved"
+
+def create_location_components(location_info, plasmids_by_cluster):
+    location = location_info.get('location', 'unresolved')
+    coding = LOCATION_CODINGS.get(location)
+    components = [{
+        "code": {
+            "coding": [{
+                "system": PLASMID_CODE_SYSTEM,
+                "code": GENOMIC_LOCATION_CODE,
+                "display": PLASMID_CODE_DISPLAYS[GENOMIC_LOCATION_CODE]
+            }],
+            "text": PLASMID_CODE_DISPLAYS[GENOMIC_LOCATION_CODE]
+        },
+        "valueCodeableConcept": {"coding": [coding], "text": location} if coding else {"text": "Unresolved"}
+    }]
+    for cluster_id in plasmid_clusters_for(location_info):
+        replicons = ', '.join(plasmids_by_cluster.get(cluster_id, {}).get('replicon_types') or [])
+        components.append({
+            "code": {"text": "Plasmid"},
+            "valueString": f"{cluster_id} {replicons}".strip()
+        })
+    return components
+
+def text_component(label, value):
+    if isinstance(value, list):
+        value = ', '.join(str(v) for v in value)
+    if value in [None, '']:
+        return None
+    return {"code": {"text": label}, "valueString": str(value)}
+
+def plasmid_observation(obs_id, code, div_text, file_sample_id, org_id):
+    return {
+        "resourceType": "Observation",
+        "id": obs_id,
+        "meta": {
+            "profile": ["http://hl7.org/fhir/StructureDefinition/Observation"],
+            "tag": [{"system": "http://terminology.kemkes.go.id/sp", "code": "genomics", "display": "Genomics"}]
+        },
+        "text": {
+            "status": "generated",
+            "div": f"<div xmlns=\"http://www.w3.org/1999/xhtml\">{html.escape(div_text, quote=False)}</div>"
+        },
+        "status": "final",
+        "category": [
+            {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "laboratory", "display": "Laboratory"}]},
+            {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0074", "code": "GE", "display": "Genetics"}]}
+        ],
+        "code": {
+            "coding": [{"system": PLASMID_CODE_SYSTEM, "code": code, "display": PLASMID_CODE_DISPLAYS[code]}],
+            "text": PLASMID_CODE_DISPLAYS[code]
+        },
+        "subject": {"reference": f"Patient/{file_sample_id}-patient"},
+        "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
+        "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
+        "performer": [{"reference": f"Organization/{org_id}"}]
+    }
+
+def load_qc_data(qc_json):
+    if not qc_json:
+        return None
+    try:
+        with open(qc_json, 'r') as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError) as e:
+        debug_print(f"Could not read assembly QC data {qc_json}: {e}")
+        return None
+
+def create_sequencing_qc_observation(file_sample_id, qc_data, org_id='unknown-org'):
+    status = qc_data.get('status', 'UNKNOWN')
+    warnings = qc_data.get('warnings') or []
+
+    components = [text_component("Sequencing platform", qc_data.get('platform'))]
+    for label, key in [("Estimated read coverage", 'estimated_coverage'), ("Minimum read coverage", 'min_coverage')]:
+        if qc_data.get(key) is not None:
+            components.append({"code": {"text": label}, "valueQuantity": {"value": qc_data[key], "unit": "x"}})
+    components.append(text_component("Coverage status", qc_data.get('coverage_status')))
+    if qc_data.get('polishing'):
+        polishing = f"{qc_data.get('polishing_tool') or 'polishing'} {qc_data['polishing']}"
+        if qc_data.get('polishing_model'):
+            polishing += f" ({qc_data['polishing_model']})"
+        components.append(text_component("Assembly polishing", polishing))
+    # one component per warning; merge_clinical_fhir.py copies them into the DiagnosticReport
+    components.extend(text_component("Quality warning", warning) for warning in warnings)
+
+    div_text = f"Sequencing QC: {status}"
+    div_text += f" - {'; '.join(warnings)}. Results for this sample may be unreliable." if warnings else "."
+
+    observation = {
+        "resourceType": "Observation",
+        "id": sanitize_id(f"{file_sample_id}-sequencing-qc"),
+        "meta": {
+            "profile": ["http://hl7.org/fhir/StructureDefinition/Observation"],
+            "tag": [{"system": "http://terminology.kemkes.go.id/sp", "code": "genomics", "display": "Genomics"}]
+        },
+        "text": {
+            "status": "generated",
+            "div": f"<div xmlns=\"http://www.w3.org/1999/xhtml\">{html.escape(div_text, quote=False)}</div>"
+        },
+        "status": "final",
+        "category": [
+            {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "laboratory", "display": "Laboratory"}]}
+        ],
+        "code": {
+            "coding": [{"system": QC_CODE_SYSTEM, "code": SEQUENCING_QC_CODE, "display": SEQUENCING_QC_DISPLAY}],
+            "text": SEQUENCING_QC_DISPLAY
+        },
+        "subject": {"reference": f"Patient/{file_sample_id}-patient"},
+        "specimen": {"reference": f"Specimen/{file_sample_id}-specimen"},
+        "effectiveDateTime": datetime.now(timezone.utc).isoformat(),
+        "performer": [{"reference": f"Organization/{org_id}"}],
+        "valueString": status,
+        "component": [c for c in components if c]
+    }
+    if warnings:
+        observation["interpretation"] = [{"coding": [{
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+            "code": "A", "display": "Abnormal"}]}]
+    return observation
+
+def create_plasmid_observations(file_sample_id, plasmid_data, plasmid_members, org_id='unknown-org'):
+    status = plasmid_data.get('status', 'failed')
+    plasmids = plasmid_data.get('plasmids', []) if status != 'failed' else []
+    confidence = plasmid_data.get('confidence', 'unknown')
+    tools = plasmid_data.get('tools', {})
+    observations = []
+
+    for plasmid in plasmids:
+        cluster_id = plasmid.get('cluster_id') or 'unclustered'
+        replicons = ', '.join(plasmid.get('replicon_types') or []) or 'Replicon not typed'
+        genes = plasmid.get('amr_genes') or []
+        size_bp = plasmid.get('size_bp')
+        mobility = plasmid.get('predicted_mobility')
+
+        components = []
+        cluster_text = cluster_id
+        if plasmid.get('secondary_cluster_id'):
+            cluster_text += f" (secondary {plasmid['secondary_cluster_id']})"
+        components.append(text_component("Plasmid cluster", cluster_text))
+        if size_bp:
+            components.append({"code": {"text": "Plasmid size"}, "valueQuantity": {"value": size_bp, "unit": "bp"}})
+        if plasmid.get('num_contigs'):
+            components.append({"code": {"text": "Number of contigs"}, "valueInteger": plasmid['num_contigs']})
+        components.append(text_component("Relaxase type", plasmid.get('relaxase_types')))
+        components.append(text_component("MPF type", plasmid.get('mpf_type')))
+        components.append(text_component("oriT type", plasmid.get('orit_types')))
+        components.append(text_component("Predicted mobility", mobility))
+        if plasmid.get('mash_nearest_neighbor'):
+            neighbor = plasmid['mash_nearest_neighbor']
+            if plasmid.get('mash_distance') is not None:
+                neighbor += f" (Mash distance {plasmid['mash_distance']})"
+            components.append(text_component("Nearest reference plasmid", neighbor))
+        components.append(text_component("Predicted host range", plasmid.get('predicted_host_range')))
+        components.append(text_component("Carried resistance genes", genes))
+        components.append(text_component("Carried carbapenemase genes", plasmid.get('carbapenemase_genes')))
+        components.append(text_component("Carried ESBL genes", plasmid.get('esbl_genes')))
+        components.append(text_component("Analysis confidence", confidence))
+
+        size_text = f"{size_bp / 1000:.1f} kb" if size_bp else "size unknown"
+        div_text = (f"Plasmid {cluster_id}: {replicons}, {size_text}, {mobility or 'mobility unknown'}; "
+                    f"carries {', '.join(genes) if genes else 'no resistance genes'}. Confidence: {confidence}.")
+
+        observation = plasmid_observation(sanitize_id(f"{file_sample_id}-plasmid-{cluster_id}"), PLASMID_CODE,
+                                          div_text, file_sample_id, org_id)
+        observation["valueCodeableConcept"] = {"text": replicons}
+        observation["component"] = [c for c in components if c]
+        members = plasmid_members.get(cluster_id, [])
+        if members:
+            observation["hasMember"] = [{"reference": f"Observation/{obs_id}"} for obs_id in members]
+        observations.append(observation)
+
+    if status == 'failed':
+        div_text = "Plasmid analysis failed; plasmid content is unknown."
+    else:
+        div_text = (f"Plasmid analysis (MOB-suite {tools.get('mob_suite', 'unknown')}): "
+                    f"{len(plasmids)} plasmid(s) detected. Confidence: {confidence}.")
+
+    summary = plasmid_observation(sanitize_id(f"{file_sample_id}-plasmid-summary"), PLASMID_ANALYSIS_CODE,
+                                  div_text, file_sample_id, org_id)
+    if status == 'failed':
+        summary["dataAbsentReason"] = {
+            "coding": [{"system": "http://terminology.hl7.org/CodeSystem/data-absent-reason", "code": "error", "display": "Error"}]
+        }
+    else:
+        summary["valueInteger"] = len(plasmids)
+    summary_components = [
+        text_component("Analysis status", status),
+        text_component("Assembly type", plasmid_data.get('assembly_type')),
+        text_component("Analysis confidence", confidence),
+        text_component("MOB-suite version", tools.get('mob_suite')),
+        text_component("Resistance gene reference", tools.get('card_db')),
+    ]
+    summary["component"] = [c for c in summary_components if c]
+    if observations:
+        summary["hasMember"] = [{"reference": f"Observation/{obs['id']}"} for obs in observations]
+
+    return [summary] + observations
+
 def main():
     parser = argparse.ArgumentParser(description='Convert KP typing data to FHIR format')
     parser.add_argument('--input', required=True, help='Path to typing JSON file')
     parser.add_argument('--sample_id', required=True, help='Sample ID')
     parser.add_argument('--output', required=True, help='Path to output FHIR JSON')
-    parser.add_argument('--lineage_dir', help='Directory with lineage files')
     parser.add_argument('--cgmlst_file', help='Path to chewBBACA results_alleles.tsv')
     parser.add_argument('--organization_metadata', help='Path to organization metadata CSV/Excel file')
+    parser.add_argument('--plasmid_json', help='Path to plasmid JSON from parse_plasmids.py')
+    parser.add_argument('--qc_json', help='Path to assembly QC JSON from assembly_qc.py')
     args = parser.parse_args()
 
     org_data = {}
@@ -715,23 +923,13 @@ def main():
         debug_print(f"Organization metadata not provided or not found: {args.organization_metadata}")
     org_id = org_data.get('org_id', 'unknown-org')
 
-    lineage_data = {}
-    if args.lineage_dir:
-        lineage_data = load_lineage_data(args.lineage_dir)
-    
     file_sample_id_variations = extract_sample_id_from_filename(args.input)
-    matched_sample_id = None
-    sample_lineage_info = None
-    
-    for variation in file_sample_id_variations:
-        if variation in lineage_data:
-            matched_sample_id = variation
-            sample_lineage_info = lineage_data[variation]
-            break
-    
-    if not sample_lineage_info:
-        debug_print("No lineage info found")
-    
+
+    plasmid_data = load_plasmid_data(args.plasmid_json)
+    plasmids_by_cluster = {p.get('cluster_id'): p for p in (plasmid_data or {}).get('plasmids', [])}
+    gene_locations = (plasmid_data or {}).get('gene_locations', {})
+    plasmid_members = defaultdict(list)
+
     try:
         if not os.path.exists(args.input):
             sys.exit(1)
@@ -782,7 +980,7 @@ def main():
                         
                         if gene in ['GyrA', 'ParC']: drug_class = 'fluoroquinolone'
                         elif gene in ['OmpK35', 'OmpK36']: drug_class = 'carbapenem'
-                        elif gene == 'Colistin': drug_class = 'colistin'
+                        elif gene in COLISTIN_MUTATION_GENES: drug_class = 'colistin'
                         
                         clean_gene = f"{gene} {mutation}"
                         display_name = clean_gene
@@ -862,14 +1060,21 @@ def main():
                                     "text": drug_class
                                 }
                             })
-                    
-                    add_standard_kp_components(components, typing_data, sample_lineage_info)
+
+                    location_info = gene_locations.get(gene if source_type == 'acquired' else clean_gene)
+                    if location_info:
+                        components.extend(create_location_components(location_info, plasmids_by_cluster))
+
+                    add_standard_kp_components(components, typing_data)
 
                     if source_type == 'acquired':
-                        annotation_text = create_enhanced_annotation(gene, drug_class, typing_data, sample_lineage_info)
+                        annotation_text = create_enhanced_annotation(gene, drug_class, typing_data,
+                                                                     intrinsic=feature_info.get('intrinsic', False))
                     else:
                         annotation_text = f"Point mutation {mutation} in {gene} conferring resistance"
-                        
+                    if location_info:
+                        annotation_text += describe_location(location_info, plasmids_by_cluster)
+
                     div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">{annotation_text}</div>"
                 
                     observation_id = sanitize_id(f"{file_sample_id}-resistance-{idx+1}")
@@ -914,6 +1119,10 @@ def main():
                         "resource": observation
                     })
 
+                    if location_info:
+                        for cluster_id in plasmid_clusters_for(location_info):
+                            plasmid_members[cluster_id].append(observation_id)
+
                     observation_count += 1
                     
                 except Exception as e:
@@ -927,8 +1136,8 @@ def main():
                 components = []
                 
                 
-                add_standard_kp_components(components, typing_data, sample_lineage_info)
-                
+                add_standard_kp_components(components, typing_data)
+
                 mlst_info = typing_data.get('mlst', {})
                 sequence_type = mlst_info.get('sequence_type', 'Unknown')
                 capsule_info = typing_data.get('capsule', {})
@@ -939,12 +1148,7 @@ def main():
                     annotation_text += f" - MLST: {sequence_type}"
                 if k_type not in ['Unknown', 'Capsule null']:
                     annotation_text += f" - Capsule: {k_type}"
-                
-                if sample_lineage_info and isinstance(sample_lineage_info.get('lineage'), dict):
-                    lineage_designation = sample_lineage_info['lineage'].get('lineage_designation', '')
-                    if lineage_designation:
-                        annotation_text += f" - Lineage: {lineage_designation}"
-                
+
                 div_text = f"<div xmlns=\"http://www.w3.org/1999/xhtml\">{annotation_text}</div>"
                 
                 susceptible_observation = {
@@ -1064,7 +1268,7 @@ def main():
         
         cgmlst_info = None
         if args.cgmlst_file:
-            cgmlst_info = load_cgmlst_data(args.cgmlst_file, matched_sample_id or args.sample_id)
+            cgmlst_info = load_cgmlst_data(args.cgmlst_file, args.sample_id)
 
         if cgmlst_info:
             try:
@@ -1173,6 +1377,25 @@ def main():
                 observation_count += 1
             except Exception as e:
                 debug_print(f"Error creating cgMLST observation: {e}")
+
+        if plasmid_data is not None:
+            try:
+                for plasmid_obs in create_plasmid_observations(file_sample_id, plasmid_data, plasmid_members, org_id):
+                    bundles[file_sample_id].append({
+                        "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
+                        "resource": plasmid_obs
+                    })
+                    observation_count += 1
+            except Exception as e:
+                debug_print(f"Error creating plasmid observations: {e}")
+
+        qc_data = load_qc_data(args.qc_json)
+        if qc_data is not None:
+            bundles[file_sample_id].append({
+                "fullUrl": f"urn:uuid:{str(uuid.uuid4()).lower()}",
+                "resource": create_sequencing_qc_observation(file_sample_id, qc_data, org_id)
+            })
+            observation_count += 1
 
         fhir_output = {
             "resourceType": "Bundle",
