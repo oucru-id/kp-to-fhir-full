@@ -13,8 +13,8 @@ process SAMPLE_REPORT {
 
     script:
     def args = []
-    if (plasmid_json.name != 'NO_FILE') args << "--plasmid-json ${plasmid_json}"
-    if (qc_json.name != 'NO_FILE') args << "--qc-json ${qc_json}"
+    if (!plasmid_json.toString().endsWith('NO_FILE')) args << "--plasmid-json ${plasmid_json}"
+    if (!qc_json.toString().endsWith('NO_FILE')) args << "--qc-json ${qc_json}"
     """
     generate_sample_report.py \\
         --sample-id '${meta.id}' \\

@@ -16,8 +16,8 @@ process FHIR_CLINICAL {
 
     script:
     def args = []
-    if (organization_metadata.name != 'NO_FILE') args << "--organization_metadata ${organization_metadata}"
-    if (practitioner_metadata.name != 'NO_FILE') args << "--practitioner_metadata ${practitioner_metadata}"
+    if (!organization_metadata.toString().endsWith('NO_FILE')) args << "--organization_metadata ${organization_metadata}"
+    if (!practitioner_metadata.toString().endsWith('NO_FILE')) args << "--practitioner_metadata ${practitioner_metadata}"
     if (params.identifier_system_base) args << "--identifier_system_base '${params.identifier_system_base}'"
     """
     clinical_to_fhir.py \\
