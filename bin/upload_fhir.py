@@ -1,136 +1,133 @@
 #!/usr/bin/env python3
+
 import argparse
 import json
 import os
 import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-import requests
+
+def http_post(url, body, headers, timeout):
+    request = urllib.request.Request(url, data=body, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return response.status, response.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as exc:
+        return exc.code, exc.read().decode("utf-8", "replace")
+    except urllib.error.URLError as exc:
+        sys.exit(f"ERROR: cannot reach {url}: {exc.reason}")
 
 
 def fetch_access_token(auth_base_url, client_id, client_secret):
     token_url = f"{auth_base_url.rstrip('/')}/protocol/openid-connect/token"
-    payload = {
-        "grant_type": "client_credentials",
-        "client_id": client_id,
-        "client_secret": client_secret,
-        "scope": "openid",
-    }
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-
-    resp = requests.post(token_url, data=payload, headers=headers, timeout=30)
-    if resp.status_code != 200:
-        print(f"ERROR: Token request failed ({resp.status_code}): {resp.text}", file=sys.stderr)
-        sys.exit(1)
-
-    token_data = resp.json()
-    access_token = token_data.get("access_token")
-    if not access_token:
-        print(f"ERROR: No access_token in response: {resp.text}", file=sys.stderr)
-        sys.exit(1)
-
-    return access_token
+    form = urllib.parse.urlencode({"grant_type": "client_credentials", "client_id": client_id,
+                                   "client_secret": client_secret, "scope": "openid"}).encode()
+    status, body = http_post(token_url, form, {"Content-Type": "application/x-www-form-urlencoded"}, 30)
+    if status != 200:
+        sys.exit(f"ERROR: token request failed (HTTP {status})")
+    try:
+        token = json.loads(body).get("access_token")
+    except ValueError:
+        token = None
+    if not token:
+        sys.exit("ERROR: token response has no access_token")
+    return token
 
 
-def upload_bundle(fhir_file, fhir_server_url, access_token, api_key):
-    with open(fhir_file, "r") as f:
-        bundle = json.load(f)
+def token_from_file(path):
+    path = Path(path)
+    if not path.exists():
+        sys.exit(f"ERROR: token file not found: {path}")
+    data = json.loads(path.read_text())
+    token = data.get("access_token")
+    if not token:
+        sys.exit(f"ERROR: no access_token in {path}")
+    expires_at = data.get("expires_at")
+    if expires_at:
+        expiry = datetime.fromisoformat(expires_at)
+        if datetime.now(expiry.tzinfo) >= expiry:
+            sys.exit(f"ERROR: token in {path} expired at {expires_at}; run get_access_token.py again")
+    return token
 
-    headers = {
-        "Content-Type": "application/fhir+json",
-        "Accept": "application/fhir+json",
-        "Authorization": f"Bearer {access_token}",
-    }
-    if api_key:
-        headers["X-Api-Key"] = api_key
 
-    resp = requests.post(fhir_server_url, json=bundle, headers=headers, timeout=120)
-
-    return resp.status_code, resp.text
+def summarise_response(body):
+    try:
+        data = json.loads(body)
+    except (ValueError, TypeError):
+        return {"unparsed": True}
+    if data.get("resourceType") == "Bundle":
+        return {"entries": [{"status": e.get("response", {}).get("status"),
+                             "location": e.get("response", {}).get("location")}
+                            for e in data.get("entry", [])]}
+    if data.get("resourceType") == "OperationOutcome":
+        return {"issues": [{"severity": i.get("severity"), "code": i.get("code")}
+                           for i in data.get("issue", [])]}
+    return {"resourceType": data.get("resourceType")}
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Upload a FHIR bundle using OAuth 2.0 client credentials")
-    parser.add_argument("--fhir_file", required=True, help="Path to the FHIR bundle JSON file")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--fhir_file", required=True, help="FHIR Bundle JSON to upload")
     parser.add_argument("--fhir_server_url", required=True, help="FHIR server base URL (POST target)")
-    parser.add_argument("--auth_base_url", default="", help="OAuth SSO base URL (e.g. https://sso.example.com/realms/myrealm)")
-    parser.add_argument("--client_id", default="", help="OAuth client_id")
-    parser.add_argument("--client_secret", default="", help="OAuth client_secret")
-    parser.add_argument("--static_token", default="", help="Pre-existing static Bearer token (skips OAuth flow)")
-    parser.add_argument("--token_file", default="", help="Path to access_token.json written by get_access_token.py")
-    parser.add_argument("--api_key", default="", help="API key sent as X-Api-Key header")
+    parser.add_argument("--auth_base_url", default="", help="OAuth/OIDC realm URL for client credentials")
+    parser.add_argument("--token_file", default="", help="access_token.json from get_access_token.py")
+    parser.add_argument("--max_retries", type=int, default=5)
     args = parser.parse_args()
 
-    if args.token_file:
-        token_path = Path(args.token_file)
-        if not token_path.exists():
-            print(f"ERROR: Token file not found: {token_path}", file=sys.stderr)
-            sys.exit(1)
-        with open(token_path, "r") as tf:
-            token_data = json.load(tf)
-        access_token = token_data.get("access_token")
-        if not access_token:
-            print(f"ERROR: No access_token field in {token_path}", file=sys.stderr)
-            sys.exit(1)
-        expires_at = token_data.get("expires_at")
-        if expires_at:
-            expiry = datetime.fromisoformat(expires_at)
-            if datetime.now(expiry.tzinfo) >= expiry:
-                print(f"ERROR: Token in {token_path} has expired at {expires_at}. Re-run get_access_token.py.", file=sys.stderr)
-                sys.exit(1)
-        print(f"Using token from {token_path}")
-    elif args.static_token:
-        access_token = args.static_token
-    elif args.auth_base_url and args.client_id and args.client_secret:
-        print(f"Fetching OAuth token from {args.auth_base_url}...")
-        access_token = fetch_access_token(args.auth_base_url, args.client_id, args.client_secret)
-        print("Token acquired.")
-    else:
-        print("ERROR: Provide --token_file, --static_token, or all of --auth_base_url, --client_id, --client_secret", file=sys.stderr)
-        sys.exit(1)
+    if not args.fhir_server_url:
+        sys.exit("ERROR: --fhir_server_url is empty")
 
-    print(f"Uploading {args.fhir_file} to {args.fhir_server_url}...")
-    import time
-    max_retries = 5
-    for attempt in range(1, max_retries + 1):
-        print(f"  attempt {attempt}/{max_retries}")
-        http_status, response_body = upload_bundle(
-            args.fhir_file, args.fhir_server_url, access_token, args.api_key
-        )
-        if http_status != 429:
+    client_id = os.environ.get("KPFHIR_CLIENT_ID", "")
+    client_secret = os.environ.get("KPFHIR_CLIENT_SECRET", "")
+    static_token = os.environ.get("KPFHIR_STATIC_TOKEN", "")
+    api_key = os.environ.get("KPFHIR_API_KEY", "")
+
+    if args.token_file:
+        token = token_from_file(args.token_file)
+    elif static_token:
+        token = static_token
+    elif args.auth_base_url and client_id and client_secret:
+        token = fetch_access_token(args.auth_base_url, client_id, client_secret)
+    else:
+        sys.exit("ERROR: no credentials: set KPFHIR_CLIENT_ID and KPFHIR_CLIENT_SECRET (with "
+                 "--auth_base_url), or KPFHIR_STATIC_TOKEN, or pass --token_file")
+
+    body = Path(args.fhir_file).read_bytes()
+    json.loads(body)
+    headers = {"Content-Type": "application/fhir+json", "Accept": "application/fhir+json",
+               "Authorization": f"Bearer {token}"}
+    if api_key:
+        headers["X-Api-Key"] = api_key
+
+    print(f"Uploading {os.path.basename(args.fhir_file)} to {args.fhir_server_url}")
+    for attempt in range(1, args.max_retries + 1):
+        status, response_body = http_post(args.fhir_server_url, body, headers, 120)
+        if status != 429:
             break
         wait = 2 ** attempt
-        print(f"retrying in {wait}s...")
+        print(f"  HTTP 429 (attempt {attempt}/{args.max_retries}); retrying in {wait}s")
         time.sleep(wait)
 
-    success = 200 <= http_status < 300
-    timestamp = datetime.now(timezone.utc).isoformat()
-    basename = os.path.basename(args.fhir_file)
-    output_file = os.path.splitext(basename)[0] + ".upload.json"
-
-    try:
-        response_json = json.loads(response_body)
-    except (json.JSONDecodeError, ValueError):
-        response_json = response_body
-
+    success = 200 <= status < 300
     result = {
         "status": "success" if success else "failed",
-        "http_status": http_status,
-        "file": args.fhir_file,
-        "timestamp": timestamp,
+        "http_status": status,
+        "file": os.path.basename(args.fhir_file),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "server": args.fhir_server_url,
-        "response": response_json,
+        "response": summarise_response(response_body),
     }
-
-    with open(output_file, "w") as f:
-        json.dump(result, f, indent=2)
-
-    print(f"Upload completed with status {http_status}")
-
+    output = Path(args.fhir_file).name.replace(".fhir.json", "").replace(".json", "") + ".upload.json"
+    with open(output, "w", encoding="utf-8") as handle:
+        json.dump(result, handle, indent=2)
+    print(f"Upload finished with HTTP {status}")
     if not success:
-        print(f"ERROR: Upload failed ({http_status}): {response_body}", file=sys.stderr)
-        sys.exit(1)
+        sys.exit(f"ERROR: upload failed (HTTP {status}); see {output}")
 
 
 if __name__ == "__main__":

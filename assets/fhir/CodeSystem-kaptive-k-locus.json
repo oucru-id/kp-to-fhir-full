@@ -1,0 +1,14 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "kaptive-k-locus",
+  "url": "http://terminology.spheres.id/CodeSystem/kaptive-k-locus",
+  "version": "2.0.0",
+  "name": "KaptiveKLocus",
+  "title": "Kaptive K loci and K types",
+  "status": "active",
+  "experimental": false,
+  "publisher": "OUCRU Indonesia - KPtoFHIR",
+  "description": "Capsule (K) loci (e.g. KL64) and K types (e.g. K64) as reported by Kaptive through Kleborate. The code is the name Kaptive reports; the set follows the Kaptive database in use.",
+  "caseSensitive": true,
+  "content": "not-present"
+}
