@@ -34,6 +34,7 @@ site*.json
 # Reference databases fetched at run time
 db/cgmlst_schema/
 db/cgmlst_schema_*
+db/mob_suite/
 
 # Pipeline outputs
 *.fhir.json

@@ -254,6 +254,9 @@ def build_plasmids(contig_rows, mobtyper_rows):
 
     return plasmids
 
+CONFIDENCE = {'ont': 'long-read', 'illumina': 'predicted (short-read)', 'fasta': 'predicted (submitted assembly)'}
+
+
 def split_gene_list(value):
     if not value or value == 'None':
         return set()
@@ -335,7 +338,7 @@ def analyse(args):
         'sample_id': args.sample_id,
         'status': status,
         'assembly_type': args.assembly_type,
-        'confidence': 'long-read' if args.assembly_type == 'ont' else 'predicted (short-read)',
+        'confidence': CONFIDENCE[args.assembly_type],
         'tools': {
             'mob_suite': status_info.get('mob_suite', 'unknown'),
             'card_db': os.path.basename(card_fasta).replace('.fasta', '') if card_fasta else 'unknown',
@@ -350,7 +353,7 @@ def main():
     parser.add_argument('--sample_id', help='Sample ID')
     parser.add_argument('--typing_json', help='Path to typing JSON from parse_results')
     parser.add_argument('--assembly', help='Assembly FASTA that MOB-suite and minimap2 were run on')
-    parser.add_argument('--assembly_type', default='illumina', choices=['illumina', 'ont'])
+    parser.add_argument('--assembly_type', default='illumina', choices=sorted(CONFIDENCE))
     parser.add_argument('--contig_report', help='MOB-suite contig_report.txt')
     parser.add_argument('--mobtyper', help='MOB-suite mobtyper_results.txt')
     parser.add_argument('--paf', help='minimap2 PAF of Kleborate CARD alleles against the assembly')
@@ -378,7 +381,7 @@ def main():
             'sample_id': args.sample_id,
             'status': 'failed',
             'assembly_type': args.assembly_type,
-            'confidence': 'long-read' if args.assembly_type == 'ont' else 'predicted (short-read)',
+            'confidence': CONFIDENCE[args.assembly_type],
             'tools': {'mob_suite': 'unknown', 'card_db': 'unknown'},
             'plasmids': [],
             'gene_locations': {},

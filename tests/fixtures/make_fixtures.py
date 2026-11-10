@@ -421,6 +421,23 @@ PRACTITIONER_ROW = {
 }
 
 
+def write_stub_inputs():
+    """Placeholder inputs for `-profile test_stub` (stub blocks never read them)."""
+    import gzip
+    stub = TEST_DATA / "stub"
+    (stub / "cgmlst_schema").mkdir(parents=True, exist_ok=True)
+    for name in ("STUBILL_1.fastq.gz", "STUBILL_2.fastq.gz", "STUBONT.fastq.gz"):
+        with open(stub / name, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", mtime=0) as handle:
+            handle.write(b"")
+    (stub / "STUBFA.fasta").write_text(">stub\nACGT\n")
+    (stub / "cgmlst_schema" / "README.md").write_text("Placeholder chewBBACA schema for -profile test_stub.\n")
+    with open(TEST_DATA / "samplesheet_stub.csv", "w") as handle:
+        handle.write("sample,platform,fastq_1,fastq_2,fasta\n")
+        handle.write("STUBILL,illumina,tests/data/stub/STUBILL_1.fastq.gz,tests/data/stub/STUBILL_2.fastq.gz,\n")
+        handle.write("STUBONT,ont,tests/data/stub/STUBONT.fastq.gz,,\n")
+        handle.write("STUBFA,fasta,,,tests/data/stub/STUBFA.fasta\n")
+
+
 def write_csv(path, columns, rows):
     with open(path, "w", newline="", encoding="utf-8") as handle:
         handle.write("# SYNTHETIC test fixture - invented values, not patient data\n")
@@ -449,7 +466,8 @@ def main():
     write_csv(HERE / "metadata" / "patient_clinical_metadata.csv", PATIENT_COLUMNS, PATIENT_ROWS)
     write_csv(HERE / "metadata" / "organization_metadata.csv", list(ORG_ROW), [ORG_ROW])
     write_csv(HERE / "metadata" / "practitioner_metadata.csv", list(PRACTITIONER_ROW), [PRACTITIONER_ROW])
-    print(f"fixtures written under {HERE}")
+    write_stub_inputs()
+    print(f"fixtures written under {HERE} and {TEST_DATA}")
 
 
 if __name__ == "__main__":
