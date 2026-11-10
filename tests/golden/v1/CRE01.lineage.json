@@ -1,0 +1,21 @@
+{
+  "sample_id": "CRE01",
+  "lineage": {
+    "sequence_type": "ST11",
+    "clonal_complex": "CC258",
+    "capsule_type": "K64",
+    "o_type": "O1/O2v1",
+    "wzi_type": "wzi64",
+    "confidence": "MLST: High",
+    "lineage_designation": "ST11",
+    "high_risk_clone": "Yes",
+    "subspecies": "pneumoniae",
+    "resistance_profile": {
+      "esbl_producer": "Yes",
+      "carbapenemase_producer": "Yes",
+      "multidrug_resistant": "Yes",
+      "risk_level": "Critical"
+    }
+  },
+  "analysis_type": "K. pneumoniae Kleborate complete analysis"
+}

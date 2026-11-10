@@ -1,0 +1,59 @@
+{
+  "sample_id": "SUS01",
+  "assembly": "SUS01",
+  "mlst": {
+    "sequence_type": "ST45",
+    "clonal_complex": "Unknown",
+    "confidence": "High",
+    "alleles": {
+      "gapA": "2",
+      "infB": "1",
+      "mdh": "1",
+      "pgi": "6",
+      "phoE": "7",
+      "rpoB": "1",
+      "tonB": "12"
+    }
+  },
+  "capsule": {
+    "k_locus": "KL62",
+    "k_type": "K62",
+    "k_confidence": "High",
+    "k_problems": "None",
+    "wzi": "wzi101"
+  },
+  "virulence": {
+    "yersiniabactin": "Unknown",
+    "colibactin": "Unknown",
+    "aerobactin": "Unknown",
+    "salmochelin": "Unknown",
+    "hypermucoidy": "Unknown",
+    "rmpa2": "Unknown",
+    "virulence_score": "0"
+  },
+  "resistance": {
+    "acquired_resistance": "None",
+    "esbl": "None",
+    "carbapenemase": "None",
+    "other_resistance": "SHV-1",
+    "resistance_score": "0",
+    "num_resistance_classes": "1",
+    "num_resistance_genes": "1",
+    "detailed_resistance": [
+      {
+        "gene": "SHV-1",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": true
+      }
+    ],
+    "point_mutations": []
+  },
+  "o_locus": {
+    "o_locus": "O1/O2v1",
+    "o_type": "O1/O2v1",
+    "o_confidence": "High"
+  },
+  "analysis_type": "K. pneumoniae complete Kleborate analysis"
+}

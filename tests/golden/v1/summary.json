@@ -1,0 +1,47 @@
+{
+  "baseline_commit": "3cb2916",
+  "samples": {
+    "CRE01": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0,
+      "plasmid_exit": 0
+    },
+    "EMPTY01": {
+      "parse_exit": 1
+    },
+    "HVKP01": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0,
+      "plasmid_exit": 0
+    },
+    "KPC258": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0
+    },
+    "KP_001": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0
+    },
+    "KP_002": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0
+    },
+    "NOVEL01": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0,
+      "plasmid_exit": 0
+    },
+    "SUS01": {
+      "genomic_exit": 0,
+      "merge_exit": 0,
+      "parse_exit": 0,
+      "plasmid_exit": 0
+    }
+  }
+}

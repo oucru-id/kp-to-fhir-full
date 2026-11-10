@@ -1,0 +1,127 @@
+{
+  "sample_id": "CRE01",
+  "assembly": "CRE01",
+  "mlst": {
+    "sequence_type": "ST11",
+    "clonal_complex": "CC258",
+    "confidence": "High",
+    "alleles": {
+      "gapA": "3",
+      "infB": "3",
+      "mdh": "1",
+      "pgi": "1",
+      "phoE": "1",
+      "rpoB": "1",
+      "tonB": "4"
+    }
+  },
+  "capsule": {
+    "k_locus": "KL64",
+    "k_type": "K64",
+    "k_confidence": "High",
+    "k_problems": "None",
+    "wzi": "wzi64"
+  },
+  "virulence": {
+    "yersiniabactin": "ybt 9; ICEKp3",
+    "colibactin": "Unknown",
+    "aerobactin": "Unknown",
+    "salmochelin": "Unknown",
+    "hypermucoidy": "Unknown",
+    "rmpa2": "Unknown",
+    "virulence_score": "1"
+  },
+  "resistance": {
+    "acquired_resistance": "OXA-1, aac(6')-Ib-cr.v2, rmtB.v1, aac(6')-Ib-cr.v2, qnrS1, sul1, dfrA12",
+    "esbl": "CTX-M-15",
+    "carbapenemase": "KPC-2",
+    "other_resistance": "KPC-2, CTX-M-15, OXA-1, SHV-11, aac(6')-Ib-cr.v2, rmtB.v1, aac(6')-Ib-cr.v2, qnrS1, sul1, dfrA12",
+    "resistance_score": "2",
+    "num_resistance_classes": "5",
+    "num_resistance_genes": "10",
+    "detailed_resistance": [
+      {
+        "gene": "KPC-2",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": false
+      },
+      {
+        "gene": "CTX-M-15",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": false
+      },
+      {
+        "gene": "OXA-1",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": false
+      },
+      {
+        "gene": "SHV-11",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": true
+      },
+      {
+        "gene": "aac(6')-Ib-cr.v2",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "rmtB.v1",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "aac(6')-Ib-cr.v2",
+        "drug_class": "flq",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "qnrS1",
+        "drug_class": "flq",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "sul1",
+        "drug_class": "sul",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "dfrA12",
+        "drug_class": "tmt",
+        "identity": "100%",
+        "coverage": "100%"
+      }
+    ],
+    "point_mutations": [
+      {
+        "gene": "GyrA",
+        "mutation": "p.Ser83Ile",
+        "type": "point_mutation"
+      },
+      {
+        "gene": "ParC",
+        "mutation": "p.Ser80Ile",
+        "type": "point_mutation"
+      }
+    ]
+  },
+  "o_locus": {
+    "o_locus": "O1/O2v1",
+    "o_type": "O1/O2v1",
+    "o_confidence": "High"
+  },
+  "analysis_type": "K. pneumoniae complete Kleborate analysis"
+}

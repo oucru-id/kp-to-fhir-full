@@ -1,0 +1,21 @@
+{
+  "sample_id": "NOVEL01",
+  "lineage": {
+    "sequence_type": "Unknown",
+    "clonal_complex": "Unknown",
+    "capsule_type": "Capsule null",
+    "o_type": "O3b",
+    "wzi_type": "Unknown",
+    "confidence": "MLST: Not determined",
+    "lineage_designation": "Unknown ST",
+    "high_risk_clone": "Unknown",
+    "subspecies": "pneumoniae",
+    "resistance_profile": {
+      "esbl_producer": "Yes",
+      "carbapenemase_producer": "No",
+      "multidrug_resistant": "Yes",
+      "risk_level": "High"
+    }
+  },
+  "analysis_type": "K. pneumoniae Kleborate complete analysis"
+}

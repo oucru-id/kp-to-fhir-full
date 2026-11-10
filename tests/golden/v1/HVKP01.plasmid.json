@@ -1,0 +1,52 @@
+{
+  "sample_id": "HVKP01",
+  "status": "ok",
+  "assembly_type": "ont",
+  "confidence": "long-read",
+  "tools": {
+    "mob_suite": "3.1.9",
+    "card_db": "CARD_v3.2.9"
+  },
+  "plasmids": [
+    {
+      "cluster_id": "AA552",
+      "secondary_cluster_id": "AA552_B",
+      "replicon_types": [
+        "IncHI1B(pNDM-MAR)",
+        "IncFIB(K)"
+      ],
+      "relaxase_types": [],
+      "mpf_type": null,
+      "orit_types": [],
+      "predicted_mobility": "non-mobilizable",
+      "size_bp": 9000,
+      "gc": 50.09,
+      "num_contigs": 1,
+      "contigs": [
+        "contig_2"
+      ],
+      "mash_nearest_neighbor": "AP006726",
+      "mash_distance": 0.0008,
+      "predicted_host_range": "Klebsiella pneumoniae",
+      "amr_genes": [],
+      "carbapenemase_genes": [],
+      "esbl_genes": []
+    }
+  ],
+  "gene_locations": {
+    "SHV-1": {
+      "location": "chromosome",
+      "copies": [
+        {
+          "molecule": "chromosome",
+          "cluster_id": null,
+          "contig": "contig_1",
+          "start": 15000,
+          "end": 15870,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    }
+  }
+}

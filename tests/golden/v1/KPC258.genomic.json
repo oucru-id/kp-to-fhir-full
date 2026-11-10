@@ -1,0 +1,1977 @@
+{
+  "entry": [
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-1",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: KPC-3"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "KPC-3",
+                  "display": "KPC-3",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "KPC-3"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "765422000",
+                  "display": "Product containing beta-lactam (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "beta-lactam"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene KPC-3 - beta-lactam resistance gene - KP MLST: ST258 - Capsule: unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-2",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: SHV-11"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "SHV-11",
+                  "display": "SHV-11",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "SHV-11"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "765422000",
+                  "display": "Product containing beta-lactam (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "beta-lactam"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-2",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene SHV-11^ - beta-lactam resistance gene (intrinsic chromosomal) - KP MLST: ST258 - Capsule: unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-3",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: aac(6')-Ib.v1"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "aac(6')-Ib.v1",
+                  "display": "aac(6')-Ib.v1",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "aac(6')-Ib.v1"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "324116004",
+                  "display": "Product containing aminoglycoside (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "agly"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-3",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene aac(6')-Ib.v1 - agly resistance gene - KP MLST: ST258 - Capsule: unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-4",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: aadA2"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "aadA2",
+                  "display": "aadA2",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "aadA2"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "324116004",
+                  "display": "Product containing aminoglycoside (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "agly"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-4",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene aadA2 - agly resistance gene - KP MLST: ST258 - Capsule: unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-5",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: sul1"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "sul1",
+                  "display": "sul1",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "sul1"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "763875007",
+                  "display": "Product containing sulfonamide (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "sul"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-5",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene sul1 - sul resistance gene - KP MLST: ST258 - Capsule: unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-6",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: dfrA12"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "dfrA12",
+                  "display": "dfrA12",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "dfrA12"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "32792001",
+                  "display": "Product containing trimethoprim (medicinal product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "tmt"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-6",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene dfrA12 - tmt resistance gene - KP MLST: ST258 - Capsule: unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-7",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: OmpK35 -25%"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "OmpK35 -25%",
+                  "display": "OmpK35 -25%",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "OmpK35 -25%"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "350134005",
+                  "display": "Product containing carbapenem (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "carbapenem"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-7",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Point mutation -25% in OmpK35 conferring resistance</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-8",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: OmpK36 GD"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "OmpK36 GD",
+                  "display": "OmpK36 GD",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "OmpK36 GD"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "350134005",
+                  "display": "Product containing carbapenem (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "carbapenem"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-8",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Point mutation GD in OmpK36 conferring resistance</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-resistance-9",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: MgrB -62%"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "MgrB -62%",
+                  "display": "MgrB -62%",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "MgrB -62%"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "73074003",
+                  "display": "Product containing colistin (medicinal product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "colistin"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-resistance-9",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Point mutation -62% in MgrB conferring resistance</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-mlst",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "612-2",
+              "display": "Bacterial strain [Type] in Isolate by Bacteria subtyping",
+              "system": "http://loinc.org"
+            }
+          ]
+        },
+        "component": [
+          {
+            "code": {
+              "text": "MLST allele gapA"
+            },
+            "valueString": "3"
+          },
+          {
+            "code": {
+              "text": "MLST allele infB"
+            },
+            "valueString": "3"
+          },
+          {
+            "code": {
+              "text": "MLST allele mdh"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele pgi"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele phoE"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele rpoB"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele tonB"
+            },
+            "valueString": "79"
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-mlst",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae MLST ST258. Alleles: gapA 3, infB 3, mdh 1, pgi 1, phoE 1, rpoB 1, tonB 79</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "258",
+              "display": "Klebsiella pneumoniae MLST ST258",
+              "system": "http://kaptive.holtlab.net/mlst"
+            }
+          ],
+          "text": "ST258"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-virulence-score",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "SP000680",
+              "display": "Klebsiella pneumoniae virulence score [Numeric] by genomic analysis",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ],
+          "text": "Virulence score"
+        },
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-virulence-score",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Virulence score: 0</div>",
+          "status": "generated"
+        },
+        "valueQuantity": {
+          "code": "score",
+          "system": "http://unitsofmeasure.org",
+          "unit": "score",
+          "value": 0
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-capsule",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "SP000678",
+              "display": "Klebsiella pneumoniae capsular type [Identifier] by genomic analysis",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ],
+          "text": "Capsule Type"
+        },
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-capsule",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae capsule type unknown (KL106)</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "unknown (KL106)",
+              "display": "Klebsiella capsule type unknown (KL106)",
+              "system": "http://kaptive.holtlab.net/capsule"
+            }
+          ],
+          "text": "unknown (KL106)"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-o-antigen",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "612-2",
+              "display": "Bacterial strain [Type] in Isolate by Bacteria subtyping",
+              "system": "http://loinc.org"
+            }
+          ]
+        },
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-o-antigen",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae O-antigen type O2a</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "O2a",
+              "display": "Klebsiella pneumoniae O2a",
+              "system": "http://kaptive.holtlab.net/o-antigen"
+            }
+          ],
+          "text": "O2a"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-susceptibility-panel",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "29576-6",
+              "display": "Bacterial susceptibility panel",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Klebsiella pneumoniae Susceptibility Panel (Genotypic Prediction)"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18864-9",
+                  "display": "Ampicillin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Ampicillin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18861-5",
+                  "display": "Amoxicillin-Clavulanate [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Amoxicillin-Clavulanate"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18970-4",
+                  "display": "Piperacillin-Tazobactam [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Piperacillin-Tazobactam"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18876-3",
+                  "display": "Cefotaxime [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Cefotaxime"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18879-7",
+                  "display": "Ceftazidime [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Ceftazidime"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18879-7",
+                  "display": "Cefepime [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Cefepime"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18943-1",
+                  "display": "Meropenem [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Meropenem"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18906-8",
+                  "display": "Ciprofloxacin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Ciprofloxacin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18928-2",
+                  "display": "Gentamicin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Gentamicin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18860-7",
+                  "display": "Amikacin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Amikacin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18998-5",
+                  "display": "Trimethoprim-Sulfamethoxazole [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Trimethoprim-Sulfamethoxazole"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18912-6",
+                  "display": "Colistin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Colistin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-susceptibility-panel",
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "code": "A",
+                "display": "Abnormal",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+              }
+            ],
+            "text": "Acquired resistance detected (9 drugs)"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KPC258-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n    <h3>Klebsiella pneumoniae Predicted Susceptibility Panel</h3>\n    <p><strong>Sample:</strong> KPC258</p>\n    <p><strong>Method:</strong> Whole Genome Sequencing - Genotypic Prediction</p>\n    <p><strong>Panel:</strong> 12 antimicrobials</p>\n    <p><strong>Summary:</strong> 10 Resistant (including 1 intrinsic), 2 Susceptible</p>\n    <table border=\"1\">\n        <tr><th>Antimicrobial</th><th>Predicted Result</th></tr>\n        <tr><td>Ampicillin</td><td><strong>Resistant</strong></td></tr><tr><td>Amoxicillin-Clavulanate</td><td><strong>Resistant</strong></td></tr><tr><td>Piperacillin-Tazobactam</td><td><strong>Resistant</strong></td></tr><tr><td>Cefotaxime</td><td><strong>Resistant</strong></td></tr><tr><td>Ceftazidime</td><td><strong>Resistant</strong></td></tr><tr><td>Cefepime</td><td><strong>Resistant</strong></td></tr><tr><td>Meropenem</td><td><strong>Resistant</strong></td></tr><tr><td>Ciprofloxacin</td><td><strong>Susceptible</strong></td></tr><tr><td>Gentamicin</td><td><strong>Susceptible</strong></td></tr><tr><td>Amikacin</td><td><strong>Resistant</strong></td></tr><tr><td>Trimethoprim-Sulfamethoxazole</td><td><strong>Resistant</strong></td></tr><tr><td>Colistin</td><td><strong>Resistant</strong></td></tr>\n    </table>\n    </div>",
+          "status": "generated"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KPC258-cgmlst",
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "SP000682",
+              "display": "Core genome MLST [Type] in Isolate by Sequencing",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ],
+          "text": "Core Genome MLST Profile"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "SP000690",
+                  "display": "Loci called",
+                  "system": "http://terminology.kemkes.go.id/sp"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "code": "1",
+              "system": "http://unitsofmeasure.org",
+              "unit": "{count}",
+              "value": 8
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "SP000691",
+                  "display": "Total loci in scheme",
+                  "system": "http://terminology.kemkes.go.id/sp"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "code": "1",
+              "system": "http://unitsofmeasure.org",
+              "unit": "{count}",
+              "value": 8
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "SP000692",
+                  "display": "Call rate",
+                  "system": "http://terminology.kemkes.go.id/sp"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "code": "%",
+              "system": "http://unitsofmeasure.org",
+              "unit": "%",
+              "value": 100.0
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00005",
+                  "display": "KP1_RS00005",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 1
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00010",
+                  "display": "KP1_RS00010",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 4
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00015",
+                  "display": "KP1_RS00015",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 12
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00020",
+                  "display": "KP1_RS00020",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 6
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00025",
+                  "display": "KP1_RS00025",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 7
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00030",
+                  "display": "KP1_RS00030",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 2
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00035",
+                  "display": "KP1_RS00035",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 3
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00040",
+                  "display": "KP1_RS00040",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 9
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KPC258-cgmlst",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KPC258-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n                <strong>Core Genome MLST Analysis</strong><br/>\n                Called Loci: 8/8 (100.0%)<br/>\n                Detailed allele profile included in components.\n                </div>",
+          "status": "generated"
+        }
+      }
+    }
+  ],
+  "resourceType": "Bundle",
+  "timestamp": "<TIMESTAMP>",
+  "total": 15,
+  "type": "collection"
+}

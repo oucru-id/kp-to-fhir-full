@@ -1,0 +1,45 @@
+{
+  "sample_id": "NOVEL01",
+  "status": "failed",
+  "assembly_type": "ont",
+  "confidence": "long-read",
+  "tools": {
+    "mob_suite": "3.1.9",
+    "card_db": "CARD_v3.2.9"
+  },
+  "plasmids": [],
+  "gene_locations": {
+    "CTX-M-15": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "SHV-28": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "aph(3')-Ia.v1": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "strA.v1": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "strB.v1": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "sul2": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "tet(A).v1": {
+      "location": "unresolved",
+      "copies": []
+    },
+    "dfrA14.v2*": {
+      "location": "unresolved",
+      "copies": []
+    }
+  }
+}

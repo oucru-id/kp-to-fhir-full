@@ -1,0 +1,102 @@
+{
+  "sample_id": "NOVEL01",
+  "assembly": "NOVEL01",
+  "mlst": {
+    "sequence_type": "Unknown",
+    "clonal_complex": "Unknown",
+    "confidence": "Not determined",
+    "alleles": {
+      "gapA": "2",
+      "infB": "1",
+      "mdh": "2*",
+      "pgi": "1",
+      "phoE": "9",
+      "rpoB": "4",
+      "tonB": "Unknown"
+    }
+  },
+  "capsule": {
+    "k_locus": "KL102",
+    "k_type": "Capsule null",
+    "k_confidence": "High",
+    "k_problems": "None",
+    "wzi": "Unknown"
+  },
+  "virulence": {
+    "yersiniabactin": "Unknown",
+    "colibactin": "Unknown",
+    "aerobactin": "Unknown",
+    "salmochelin": "Unknown",
+    "hypermucoidy": "Unknown",
+    "rmpa2": "Unknown",
+    "virulence_score": "0"
+  },
+  "resistance": {
+    "acquired_resistance": "aph(3')-Ia.v1, strA.v1, strB.v1, sul2, tet(A).v1, dfrA14.v2*",
+    "esbl": "CTX-M-15",
+    "carbapenemase": "None",
+    "other_resistance": "CTX-M-15, SHV-28, aph(3')-Ia.v1, strA.v1, strB.v1, sul2, tet(A).v1, dfrA14.v2*",
+    "resistance_score": "1",
+    "num_resistance_classes": "5",
+    "num_resistance_genes": "8",
+    "detailed_resistance": [
+      {
+        "gene": "CTX-M-15",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": false
+      },
+      {
+        "gene": "SHV-28",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": true
+      },
+      {
+        "gene": "aph(3')-Ia.v1",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "strA.v1",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "strB.v1",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "sul2",
+        "drug_class": "sul",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "tet(A).v1",
+        "drug_class": "tet",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "dfrA14.v2*",
+        "drug_class": "tmt",
+        "identity": "100%",
+        "coverage": "100%"
+      }
+    ],
+    "point_mutations": []
+  },
+  "o_locus": {
+    "o_locus": "O3b",
+    "o_type": "O3b",
+    "o_confidence": "High"
+  },
+  "analysis_type": "K. pneumoniae complete Kleborate analysis"
+}

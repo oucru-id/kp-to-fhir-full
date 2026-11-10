@@ -1,0 +1,21 @@
+{
+  "sample_id": "HVKP01",
+  "lineage": {
+    "sequence_type": "ST23",
+    "clonal_complex": "CC23",
+    "capsule_type": "K1",
+    "o_type": "O1/O2v2",
+    "wzi_type": "wzi1",
+    "confidence": "MLST: High",
+    "lineage_designation": "ST23",
+    "high_risk_clone": "No",
+    "subspecies": "pneumoniae",
+    "resistance_profile": {
+      "esbl_producer": "No",
+      "carbapenemase_producer": "No",
+      "multidrug_resistant": "No",
+      "risk_level": "Low"
+    }
+  },
+  "analysis_type": "K. pneumoniae Kleborate complete analysis"
+}

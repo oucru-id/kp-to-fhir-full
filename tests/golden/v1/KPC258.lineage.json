@@ -1,0 +1,21 @@
+{
+  "sample_id": "KPC258",
+  "lineage": {
+    "sequence_type": "ST258",
+    "clonal_complex": "CC258",
+    "capsule_type": "unknown (KL106)",
+    "o_type": "O2a",
+    "wzi_type": "wzi29",
+    "confidence": "MLST: High",
+    "lineage_designation": "ST258",
+    "high_risk_clone": "Yes",
+    "subspecies": "pneumoniae",
+    "resistance_profile": {
+      "esbl_producer": "No",
+      "carbapenemase_producer": "Yes",
+      "multidrug_resistant": "Yes",
+      "risk_level": "Critical"
+    }
+  },
+  "analysis_type": "K. pneumoniae Kleborate complete analysis"
+}
