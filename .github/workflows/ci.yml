@@ -78,9 +78,10 @@ jobs:
         run: nextflow run . -profile test,docker
       - name: Check typing, AMR and validation
         run: |
-          grep -q '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json
-          grep -q '"carbapenemase": "KPC-2"' results_test/typing/HS11286_typing.json
-          grep -q '"text": "Carbapenem-Resistant Enterobacteriaceae (CRE)"' results_test/fhir/genomic/HS11286.genomic.fhir.json
+          grep '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json
+          grep '"carbapenemase": "KPC-2"' results_test/typing/HS11286_typing.json
+          grep '"text": "Extensively Drug-Resistant (XDR)"' results_test/fhir/genomic/HS11286.genomic.fhir.json
+          cat results_test/fhir/validation/validation_summary.tsv
           awk -F'\t' 'NR > 1 && $2 != 0 {print; bad = 1} END {exit bad}' results_test/fhir/validation/validation_summary.tsv
 
   test_conda:
@@ -100,4 +101,5 @@ jobs:
         run: nextflow run . -profile test,conda
       - name: Check typing
         run: |
-          grep -q '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json
+          grep '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json
+          grep '"carbapenemase": "KPC-2"' results_test/typing/HS11286_typing.json

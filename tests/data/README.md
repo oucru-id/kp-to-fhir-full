@@ -8,7 +8,8 @@
 | Assembly | RefSeq `GCF_000240185.1` (ASM24018v2), complete genome: chromosome and 6 plasmids |
 | URL | https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/240/185/GCF_000240185.1_ASM24018v2/GCF_000240185.1_ASM24018v2_genomic.fna.gz |
 | Size / md5 | 1,679,403 bytes, `d5ca66f37a3e464d1fa922748cfb87ff` (NCBI `md5checksums.txt`, checked 2026-11-10) |
-| Why | ST11 with *bla*<sub>KPC-2</sub> on a plasmid: CI asserts ST11, the KPC-2 call, the CRE classification and 0 FHIR validation errors |
+| Why | ST11 with *bla*<sub>KPC-2</sub> on a plasmid: CI asserts ST11, the KPC-2 call, the classification and 0 FHIR validation errors |
+| Expected classification | **XDR**, not CRE. Kleborate 3.2.4 also reports a PmrB `p.Gly20fs` frameshift, and the v1.4 rules count any MgrB/PmrB/PhoPQ mutation as colistin resistance. This is kept from v1.4 (see the README limitations). |
 
 The file is not stored in this repository. NCBI data are in the public domain
 (NCBI website and data usage policies). The test profile skips plasmid analysis

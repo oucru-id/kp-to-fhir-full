@@ -268,6 +268,10 @@ These are kept from v1.4 on purpose; 2.0 changes the structure, not the science.
   Kleborate's species call for other *Klebsiella* or contaminants.
 - **Kleborate is the only resistance caller.** The susceptibility panel is a genotypic prediction
   from a fixed rule set (`bin/kpfhir_resistance.py`), not a phenotype.
+- **Any MgrB / PmrB / PhoPQ mutation counts as colistin resistance.** Frameshifts are often
+  assembly errors, especially at low coverage, yet they turn a carbapenemase producer into XDR.
+  For example, the HS11286 test genome is reported XDR because of a PmrB `p.Gly20fs` call. Check
+  the mutation before acting on an XDR call.
 - **Hand-written tables**:
   - The clonal-complex table covers about 20 STs; other STs report `Unknown`.
   - The `high_risk_clone` list (ST11, ST258, ST147, ST15) and the subspecies ST ranges in
