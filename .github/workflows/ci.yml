@@ -99,4 +99,5 @@ jobs:
         shell: bash -el {0}
         run: nextflow run . -profile test,conda
       - name: Check typing
-        run: grep -q '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json
+        run: |
+          grep -q '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json
