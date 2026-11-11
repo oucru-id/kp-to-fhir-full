@@ -66,11 +66,23 @@ apart from the fixes listed below (`tests/compat/allowlist.py`).
     by published CodeSystems in `assets/fhir/`.
 - **Patient names** appear only in the Patient resource; they are no longer copied into displays,
   the Specimen note or the HTML report.
-- **Command-line parameter types on Nextflow 26.04.** Nextflow 26.04 passes command-line
-  parameters as strings, so with nf-schema 2.5.1 every numeric parameter failed validation, and
-  booleans such as `--plasmid_analysis false` would have counted as true. The schema now accepts
-  the string forms, and the pipeline converts them where they drive logic. Tested on Nextflow
-  25.04.6, 25.10.2 and 26.04.1.
+- **Command-line parameters on Nextflow 26.04.** 26.04 passes every command-line value as text:
+  - Every number given on the command line failed schema validation.
+  - `false` counted as true. This affected `--plasmid_analysis false`, `--skip_fhir_validation
+    false`, `--require_clinical false`, `--publish_clinical false`, `--fail_on_validation_error
+    false` and `--fhir_upload_api_key false`.
+
+  Values are now converted to their schema type before validation
+  (`subworkflows/local/utils_params.nf`, shared with TBtoFHIR) and where the pipeline reads them.
+  This works the same on Nextflow 25.04, 25.10 and 26.04. Resuming on 26.04.0 or 26.04.1 warns
+  that those versions leave parameters out of the task hash.
+- **Validation results of all but one batch were lost.** Files are validated in batches of
+  `--fhir_validation_batch_size` (50). Every batch published `validation.json` and
+  `validation_summary.tsv` to the same path, so a run with more than 50 FHIR files kept only one
+  batch's results. The summaries are now merged into one `validation_summary.tsv`, and each
+  batch's validator output is kept as `validation_<n>.json`.
+- **Optional inputs.** An absent plasmid, QC, cgMLST or metadata file was passed to the scripts
+  as if it were a real file, because the placeholder was staged in a sub-folder.
 
 ### Added
 
@@ -101,7 +113,8 @@ apart from the fixes listed below (`tests/compat/allowlist.py`).
 - GitHub Actions CI:
   - the PHI guard, gitleaks, ruff and `nextflow lint`;
   - pytest on Python 3.10 and 3.12;
-  - the stub run on Nextflow 25.04.6 and the latest release;
+  - the stub run on Nextflow 25.04.6, 25.10.2 and the latest release, with command-line
+    parameters of every type and rejected values;
   - the test profile under Docker and conda.
 - `tools/dev/check_no_phi.py` as a pre-commit hook, `.gitleaks.toml` and Dependabot.
 

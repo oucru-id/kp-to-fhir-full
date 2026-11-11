@@ -1,3 +1,5 @@
+include { asFlag } from '../../subworkflows/local/utils_params'
+
 process FHIR_LINK {
     label 'process_single'
     conda "conda-forge::python=3.12"
@@ -16,7 +18,7 @@ process FHIR_LINK {
     script:
     def args = []
     if (!external_refs.toString().endsWith('NO_FILE')) args << "--external_refs ${external_refs}"
-    if (params.require_clinical.toString().toBoolean()) args << "--require_clinical"
+    if (asFlag(params.require_clinical)) args << "--require_clinical"
     if (params.identifier_system_base) args << "--identifier_system_base '${params.identifier_system_base}'"
     """
     link_fhir_bundle.py \\

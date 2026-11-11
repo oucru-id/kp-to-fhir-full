@@ -51,20 +51,12 @@
                     "description": "Expected genome size, for Flye (--genome-size) and the Nanopore coverage estimate."
                 },
                 "nanopore_min_q": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+$",
+                    "type": "integer",
                     "default": 10,
                     "description": "chopper minimum read quality."
                 },
                 "nanopore_min_l": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+$",
+                    "type": "integer",
                     "default": 500,
                     "description": "chopper minimum read length."
                 },
@@ -74,21 +66,13 @@
                     "description": "medaka consensus model; must match the flow cell and basecaller of the ONT reads."
                 },
                 "medaka_batch_size": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+$",
+                    "type": "integer",
                     "default": 20,
                     "minimum": 1,
                     "description": "medaka inference batch size (lower it when a GPU runs out of memory)."
                 },
                 "min_nanopore_coverage": {
-                    "type": [
-                        "number",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+(\\.\\d+)?$",
+                    "type": "number",
                     "default": 30,
                     "minimum": 0,
                     "description": "Warn, and flag the FHIR report, below this Nanopore read coverage (after chopper)."
@@ -101,16 +85,7 @@
             "fa_icon": "fas fa-circle-notch",
             "properties": {
                 "plasmid_analysis": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
-                    "enum": [
-                        true,
-                        false,
-                        "true",
-                        "false"
-                    ],
+                    "type": "boolean",
                     "default": true,
                     "description": "Run MOB-suite and locate Kleborate resistance genes on plasmids or the chromosome."
                 },
@@ -126,32 +101,20 @@
                     "description": "Where mob_init stores the MOB-suite database when --mobsuite_db is unset."
                 },
                 "plasmid_chrom_min_contig": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+$",
+                    "type": "integer",
                     "default": 20000,
                     "minimum": 0,
                     "description": "Shortest chromosome contig (bp) on which a gene counts as chromosomal; shorter contigs are 'unresolved'."
                 },
                 "amr_locate_min_identity": {
-                    "type": [
-                        "number",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+(\\.\\d+)?$",
+                    "type": "number",
                     "default": 90,
                     "minimum": 0,
                     "maximum": 100,
                     "description": "Minimum identity (%) of a CARD allele hit used to locate a gene."
                 },
                 "amr_locate_min_coverage": {
-                    "type": [
-                        "number",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+(\\.\\d+)?$",
+                    "type": "number",
                     "default": 80,
                     "minimum": 0,
                     "maximum": 100,
@@ -235,16 +198,7 @@
                     "description": "JSON {fhir_id: {\"Patient\": \"<server id>\", \"Encounter\": \"<server id>\"}} for resources that already exist on the server."
                 },
                 "require_clinical": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
-                    "enum": [
-                        true,
-                        false,
-                        "true",
-                        "false"
-                    ],
+                    "type": "boolean",
                     "default": false,
                     "description": "Fail when a sample has no row in the patient table (default: warn, genomic bundle only)."
                 },
@@ -258,16 +212,7 @@
                     "description": "Transaction entry method. POST uses server-assigned ids and ifNoneExist on NIK (SATUSEHAT)."
                 },
                 "publish_clinical": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
-                    "enum": [
-                        true,
-                        false,
-                        "true",
-                        "false"
-                    ],
+                    "type": "boolean",
                     "default": true,
                     "description": "Publish the clinical resources to <outdir>/fhir/clinical."
                 }
@@ -279,16 +224,7 @@
             "fa_icon": "fas fa-check-double",
             "properties": {
                 "skip_fhir_validation": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
-                    "enum": [
-                        true,
-                        false,
-                        "true",
-                        "false"
-                    ],
+                    "type": "boolean",
                     "default": false,
                     "description": "Do not run the HL7 FHIR validator."
                 },
@@ -307,24 +243,11 @@
                     "description": "Terminology server for code validation; 'n/a' validates offline and sends nothing."
                 },
                 "fail_on_validation_error": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
-                    "enum": [
-                        true,
-                        false,
-                        "true",
-                        "false"
-                    ],
+                    "type": "boolean",
                     "description": "Stop the run when a bundle has validation errors (default: true for generic, false for satusehat)."
                 },
                 "fhir_validation_batch_size": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+$",
+                    "type": "integer",
                     "default": 50,
                     "minimum": 1,
                     "description": "Files validated per validator process."
@@ -348,16 +271,7 @@
                     "description": "OAuth2/OIDC realm URL for the client-credentials token."
                 },
                 "fhir_upload_api_key": {
-                    "type": [
-                        "boolean",
-                        "string"
-                    ],
-                    "enum": [
-                        true,
-                        false,
-                        "true",
-                        "false"
-                    ],
+                    "type": "boolean",
                     "default": false,
                     "description": "Also send the KPFHIR_API_KEY secret as an X-Api-Key header."
                 }
@@ -369,11 +283,7 @@
             "fa_icon": "fas fa-microchip",
             "properties": {
                 "max_cpus": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "pattern": "^-?\\d+$",
+                    "type": "integer",
                     "default": 8,
                     "description": "Most CPUs any task may request."
                 },

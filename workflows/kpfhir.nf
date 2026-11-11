@@ -9,6 +9,7 @@ include { FHIR              } from '../subworkflows/local/fhir'
 include { PREPARE_ASSEMBLY  } from '../modules/local/prepare_assembly'
 include { MULTIQC           } from '../modules/local/multiqc'
 include { SAMPLE_REPORT     } from '../modules/local/sample_report'
+include { asFlag            } from '../subworkflows/local/utils_params'
 
 def fhirId(String id) {
     return id.replaceAll(/[^A-Za-z0-9\-]/, '-').replaceAll(/-+/, '-').replaceAll(/^-+|-+$/, '')
@@ -149,7 +150,7 @@ workflow KPFHIR {
     ch_versions = ch_versions.mix(TYPING.out.versions)
 
     ch_plasmid = channel.empty()
-    if (params.plasmid_analysis.toString().toBoolean()) {
+    if (asFlag(params.plasmid_analysis)) {
         PLASMID(ch_assemblies, TYPING.out.typing)
         ch_plasmid = PLASMID.out.plasmid
         ch_versions = ch_versions.mix(PLASMID.out.versions)

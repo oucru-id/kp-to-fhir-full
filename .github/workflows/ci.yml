@@ -58,13 +58,34 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextflow: ["25.04.6", "latest-everything"]
+        nextflow: ["25.04.6", "25.10.2", "latest-everything"]
     steps:
       - uses: actions/checkout@v5
       - uses: nf-core/setup-nextflow@v2
         with:
           version: ${{ matrix.nextflow }}
       - run: nextflow run . -profile test_stub -stub-run
+      - name: Command-line parameters of every type
+        run: |
+          nextflow run . -profile test_stub -stub-run --outdir results_cli \
+            --nanopore_min_q 12 --min_nanopore_coverage 25.5 --fhir_validation_batch_size 2 \
+            --plasmid_analysis false --skip_fhir_validation false --require_clinical false \
+            --publish_clinical false --fail_on_validation_error false --performer_org_id 99000001
+          test -e results_cli/qc/nanoplot/STUBONT_NanoStats.txt
+          test ! -e results_cli/plasmid
+          test ! -e results_cli/fhir/clinical
+          test "$(ls results_cli/fhir/validation/validation_*.json | wc -l)" -gt 1
+          test "$(tail -n +2 results_cli/fhir/validation/validation_summary.tsv | wc -l)" -eq \
+               "$(ls results_cli/fhir/genomic/*.json results_cli/fhir/bundle/*.bundle.fhir.json 2>/dev/null | wc -l)"
+      - name: Invalid parameters are rejected
+        run: |
+          rejected() {
+            if nextflow run . -profile test_stub -stub-run --outdir results_bad "$1" "$2" > bad.log 2>&1; then exit 1; fi
+            grep -qF -- "$1 ($2)" bad.log
+          }
+          rejected --nanopore_min_q twelve
+          rejected --plasmid_analysis maybe
+          rejected --amr_locate_min_identity 200
 
   test_docker:
     runs-on: ubuntu-latest
@@ -75,7 +96,9 @@ jobs:
         with:
           version: latest-everything
       - name: HS11286 assembly end to end (Docker), validation must report 0 errors
-        run: nextflow run . -profile test,docker
+        run: >-
+          nextflow run . -profile test,docker
+          --fhir_validation_batch_size 1 --fail_on_validation_error true --plasmid_analysis false
       - name: Check typing, AMR and validation
         run: |
           grep '"sequence_type": "ST11"' results_test/typing/HS11286_typing.json

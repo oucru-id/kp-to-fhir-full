@@ -44,7 +44,9 @@ output layout and the FHIR structure. Read the
 
 ## Requirements
 
-You need [Nextflow](https://www.nextflow.io/) ≥ 25.04 and **one** of the following:
+You need [Nextflow](https://www.nextflow.io/) ≥ 25.04 and **one** of the following. On 26.04, use
+26.04.2 or later: 26.04.0 and 26.04.1 leave parameters out of the task hash, so `-resume` reuses
+results made with other settings.
 
 | Profile | Provides the tools via |
 |---|---|
@@ -84,7 +86,8 @@ nextflow run . -profile test,docker           # HS11286 (ST11, KPC-2) RefSeq ass
 GitHub Actions (`.github/workflows/ci.yml`) runs on every push and pull request:
 - the PHI guard, gitleaks, ruff and `nextflow lint`
 - pytest
-- the stub run on Nextflow 25.04 and the latest release
+- the stub run on Nextflow 25.04, 25.10 and the latest release, with command-line parameters
+  of every type
 - the test profile under Docker and under conda
 
 ## Input
@@ -209,7 +212,22 @@ For SATUSEHAT, test against the sandbox first.
 ## Configuration
 
 All parameters are described in [nextflow_schema.json](nextflow_schema.json) and listed by
-`nextflow run . --help`. The most used:
+`nextflow run . --help`.
+
+Values are checked against the schema type on Nextflow 25.04, 25.10 and 26.04, wherever they are
+given. Switches accept `--plasmid_analysis`, `--plasmid_analysis true` and
+`--plasmid_analysis false`.
+
+On Nextflow 25.04 and 25.10, a command-line value that looks like a number is turned into one,
+so leading zeros are lost (`--performer_org_id 0123` becomes `123`). Give such ids in a params
+file instead:
+
+```bash
+printf 'performer_org_id: "0123"\n' > params.yml
+nextflow run . -params-file params.yml --input samplesheet.csv
+```
+
+The most used:
 
 | Parameter | Default | Purpose |
 |---|---|---|
@@ -240,7 +258,7 @@ results/
     ├── genomic/        <id>.genomic.fhir.json                      (PHI-free)
     ├── clinical/       clinical resources, clinical_summary.tsv   (personal data)
     ├── bundle/         <id>.bundle.fhir.json, link_summary.tsv    (personal data)
-    ├── validation/     validation.json, validation_summary.tsv
+    ├── validation/     validation_summary.tsv, validation_<n>.json (validator output per batch)
     └── upload/         <id>.bundle.upload.json
 ```
 
@@ -268,10 +286,15 @@ These are kept from v1.4 on purpose; 2.0 changes the structure, not the science.
   Kleborate's species call for other *Klebsiella* or contaminants.
 - **Kleborate is the only resistance caller.** The susceptibility panel is a genotypic prediction
   from a fixed rule set (`bin/kpfhir_resistance.py`), not a phenotype.
-- **Any MgrB / PmrB / PhoPQ mutation counts as colistin resistance.** Frameshifts are often
-  assembly errors, especially at low coverage, yet they turn a carbapenemase producer into XDR.
-  For example, the HS11286 test genome is reported XDR because of a PmrB `p.Gly20fs` call. Check
-  the mutation before acting on an XDR call.
+- **Colistin resistance from MgrB / PmrB / PhoPQ mutations follows Kleborate.** Kleborate
+  reports truncations and frameshifts in these genes as colistin-resistance mutations and counts
+  them in its own resistance score. KPtoFHIR does the same, so a carbapenemase producer with such
+  a call is classified XDR.
+  - Example: the HS11286 test genome. Kleborate reports `pmrB p.Gly20fs` and scores it 3
+    (carbapenemase with colistin resistance); KPtoFHIR reports XDR.
+  - Frameshifts can be assembly or sequencing errors, especially at low coverage or in older
+    homopolymer-prone data. Check the mutation, and the colistin phenotype, before acting on an
+    XDR call.
 - **Hand-written tables**:
   - The clonal-complex table covers about 20 STs; other STs report `Unknown`.
   - The `high_risk_clone` list (ST11, ST258, ST147, ST15) and the subspecies ST ranges in

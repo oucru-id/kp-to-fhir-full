@@ -3,6 +3,7 @@ include { NANOPLOT      } from '../../modules/local/nanoplot'
 include { FLYE          } from '../../modules/local/flye'
 include { MEDAKA_POLISH } from '../../modules/local/medaka_polish'
 include { ASSEMBLY_QC   } from '../../modules/local/assembly_qc'
+include { asNumber      } from './utils_params'
 
 workflow ASSEMBLY_NANOPORE {
     take:
@@ -10,7 +11,7 @@ workflow ASSEMBLY_NANOPORE {
     genome_bp
 
     main:
-    def min_coverage = params.min_nanopore_coverage as double
+    def min_coverage = asNumber(params.min_nanopore_coverage)
     CHOPPER(reads)
     NANOPLOT(CHOPPER.out.reads, genome_bp)
     FLYE(CHOPPER.out.reads)
@@ -23,7 +24,7 @@ workflow ASSEMBLY_NANOPORE {
             log.warn "${meta.id}: medaka polishing failed, so the unpolished Flye assembly is used"
         }
     NANOPLOT.out.coverage
-        .filter { _meta, coverage -> coverage == 'NA' || (coverage as double) < min_coverage }
+        .filter { _meta, coverage -> coverage == 'NA' || coverage.toString().toBigDecimal() < min_coverage }
         .subscribe { meta, coverage ->
             log.warn "${meta.id}: estimated Nanopore coverage after trimming is ${coverage}x " +
                      "(minimum ${params.min_nanopore_coverage}x); assembly, MLST/cgMLST and resistance " +
