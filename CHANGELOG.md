@@ -4,7 +4,8 @@
 
 2.0 restructures KPtoFHIR along the lines of TBtoFHIR 2.0. Kleborate, MOB-suite and chewBBACA
 are called exactly as in 1.4.2, and `--fhir_profile satusehat` reproduces the 1.4.2 FHIR output
-apart from the fixes listed below (`tests/compat/allowlist.py`).
+apart from the fixes listed below (`tests/compat/allowlist.py`). Illumina reads are now
+assembled with SPAdes instead of MEGAHIT, so results from Illumina reads differ from 1.4.2.
 
 ### Breaking changes
 
@@ -120,6 +121,12 @@ apart from the fixes listed below (`tests/compat/allowlist.py`).
 
 ### Changed
 
+- **Illumina assembly uses SPAdes 4.3.0 (`--isolate`) instead of MEGAHIT 1.2.9.**
+  - SPAdes is built for single isolates, MEGAHIT for metagenomes.
+  - fastp trimming and the bwa / samtools / Pilon polishing are unchanged. Contigs under 500 bp
+    are still dropped.
+  - SPAdes' working folder, including its corrected reads, is deleted once the contigs are
+    copied out.
 - Nextflow layout:
   - a thin `main.nf` and `workflows/kpfhir.nf`;
   - six subworkflows (Illumina assembly, Nanopore assembly, typing, plasmid, cgMLST, FHIR);

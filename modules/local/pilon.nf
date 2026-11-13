@@ -26,7 +26,7 @@ process PILON {
 
     stub:
     """
-    printf '>k141_1_pilon\\nACGT\\n' > ${meta.id}_contigs.fasta
+    printf '>NODE_1_length_4_cov_1.0_pilon\\nACGT\\n' > ${meta.id}_contigs.fasta
     printf '"%s":\\n    pilon: stub\\n' "${task.process}" > versions.yml
     """
 }

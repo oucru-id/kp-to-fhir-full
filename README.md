@@ -18,7 +18,7 @@ output layout and the FHIR structure. Read the
 ## Key features
 
 - **Three kinds of input**:
-  - Illumina paired-end reads, assembled with fastp, MEGAHIT and Pilon.
+  - Illumina paired-end reads, assembled with fastp, SPAdes and Pilon.
   - Oxford Nanopore reads, assembled with chopper, NanoPlot, Flye and medaka.
   - Finished assemblies (`fasta`), which go straight to typing.
 - **Kleborate 3 typing**:
@@ -55,11 +55,12 @@ results made with other settings.
 | `-profile conda` (or `mamba`) | pinned bioconda / conda-forge packages |
 | none | tools already on `PATH` |
 
-Every process uses the tool versions that produced the v1.4.2 results:
+Every process uses the tool versions that produced the v1.4.2 results, except Illumina assembly:
+2.0 uses SPAdes instead of MEGAHIT.
 
 | Step | Tools |
 |---|---|
-| Illumina | FastQC 0.12.1, fastp 0.23.4, MEGAHIT 1.2.9, bwa 0.7.17, samtools 1.21, Pilon 1.24 |
+| Illumina | FastQC 0.12.1, fastp 0.23.4, SPAdes 4.3.0, bwa 0.7.17, samtools 1.21, Pilon 1.24 |
 | ONT | chopper 0.12.0, NanoPlot 1.48.0, Flye 2.9.6, medaka 2.1.0 |
 | typing, plasmid, cgMLST | Kleborate 3.2.4, MOB-suite 3.1.9, minimap2 2.26, chewBBACA 3.4.2 |
 | other | MultiQC 1.30, Python 3.12 (standard library only), Java 21 |
@@ -301,8 +302,8 @@ These are kept from v1.4 on purpose; 2.0 changes the structure, not the science.
     `lineage.json` are incomplete. They are used only in the text report.
 - **medaka model.** The default `r941_min_sup_g507` suits R9.4.1 flow cells. Set
   `--medaka_model` for R10 data.
-- **Plasmid placement from short reads is a prediction.** MEGAHIT breaks plasmids at repeats,
-  so many genes are `unresolved`. Nanopore assemblies place genes more reliably.
+- **Plasmid placement from short reads is a prediction.** Short-read assemblies break plasmids
+  at repeats, so many genes are `unresolved`. Nanopore assemblies place genes more reliably.
 - **Point-mutation HGVS.** Kleborate's porin and truncation notations (e.g. `OmpK36GD`,
   `MgrB-62%`) are not HGVS. The protein-change component is filled only when the notation looks
   like a substitution, and v1.4's parsing is kept.
