@@ -1,26 +1,4 @@
-"""The documented differences between v1.4.2 and 2.0 (``--fhir_profile satusehat``).
 
-``expected_v2(v1_bundle)`` applies each intended change to a *normalised*
-v1 bundle. The 2.0 bundle, normalised the same way and with the resources
-that v1 never wrote removed (see ``without_new_resources``), must then be
-identical. Anything not listed here is a regression.
-
-1.  HGVS system is ``http://varnomen.hgvs.org`` (v1: https).
-2.  The placeholder plasmid and QC CodeSystems
-    (``kp-pipeline-docs.readthedocs.io/fhir/CodeSystem/...``) are replaced by
-    the published project CodeSystems in assets/fhir/.
-3.  Patient names are only in the Patient resource: no ``display`` on
-    DiagnosticReport.subject / .specimen, Specimen.subject, ServiceRequest.subject,
-    no name in the Specimen note or the HTML report.
-4.  No placeholders: v1 wrote ``"Unknown"`` for missing names, birth dates and
-    NIKs and the run time for missing specimen dates; 2.0 omits them.
-5.  NIKs keep their leading zeros (v1 read the CSV with pandas, which turned
-    the column into integers).
-6.  DiagnosticReport has a narrative (``text``) summarising the conclusion.
-7.  An Encounter is created (v1 referenced one that did not exist), and every
-    genomic bundle carries a Device and a Provenance; these new resources are
-    compared separately in tests/test_clinical.py and tests/test_link.py.
-"""
 import copy
 import re
 import sys
