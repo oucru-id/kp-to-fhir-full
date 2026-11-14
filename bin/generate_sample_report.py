@@ -3,7 +3,6 @@ import json
 import datetime
 import argparse
 
-# Kleborate writes drug classes as short codes (AGly_acquired -> 'agly')
 DRUG_CLASS_ALIASES = {'agly': 'aminoglycoside', 'flq': 'fluoroquinolone', 'tet': 'tetracycline'}
 
 def is_clinically_significant_resistance(resistance_data):
@@ -28,7 +27,6 @@ def is_clinically_significant_resistance(resistance_data):
     return significant_genes
 
 def is_intrinsic_gene(gene_info):
-    # Set by parse_results for Kleborate's Bla_chr column (chromosomal SHV/LEN/OKP)
     return bool(gene_info.get('intrinsic', False))
 
 def format_plasmid_section(plasmid_json):
