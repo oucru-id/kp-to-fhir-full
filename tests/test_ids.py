@@ -1,4 +1,4 @@
-"""Sample identity: no prefix or substring matching (the v1.4 KP_001/KP_002 bug)."""
+
 import pytest
 
 from chain import read, run_all, run_typing
