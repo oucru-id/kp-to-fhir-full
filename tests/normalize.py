@@ -1,17 +1,4 @@
-"""Normalise FHIR bundles so runs can be compared byte for byte.
 
-Volatile parts are replaced with fixed placeholders:
-
-* ``Bundle.id``, ``Bundle.timestamp`` and every ISO-8601 date-time string,
-  plus v1's ``YYYY-MM-DD HH:MM:SS UTC`` report date
-* entry ``fullUrl`` values become ``urn:kpfhir:<Type>/<id>``, and references
-  that point at a fullUrl are rewritten to ``<Type>/<id>``. Bundles that
-  reference by ``Type/id`` and bundles that reference by ``urn:uuid`` then
-  normalise to the same thing.
-* the date suffix of ``KP-GEN-<sample>-YYYYMMDD`` identifiers
-* ``presentedForm.data`` is base64-decoded (and its timestamps normalised)
-  so differences in the HTML report are readable in a diff.
-"""
 import base64
 import copy
 import json
