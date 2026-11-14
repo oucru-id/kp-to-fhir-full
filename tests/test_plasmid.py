@@ -1,4 +1,4 @@
-"""parse_plasmids.py: unchanged v1 output, plus the confidence label of fasta input."""
+
 import json
 
 import pytest
