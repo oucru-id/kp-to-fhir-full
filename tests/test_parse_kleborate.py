@@ -1,4 +1,4 @@
-"""kp_parse_kleborate.py reproduces v1's inline parse_results exactly."""
+
 import pytest
 
 from conftest import FIXTURES, GOLDEN, SAMPLES, run_script
