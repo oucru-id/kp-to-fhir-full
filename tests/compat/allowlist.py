@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "bin"))
-from kpfhir_terminology import CS_KP_PLASMID, CS_OBSERVATION_CODE  # noqa: E402
+from kpfhir_terminology import CS_KP_PLASMID, CS_OBSERVATION_CODE  
 
 V1_PLASMID_CS = "https://kp-pipeline-docs.readthedocs.io/fhir/CodeSystem/kp-plasmid"
 V1_QC_CS = "https://kp-pipeline-docs.readthedocs.io/fhir/CodeSystem/kp-qc"
