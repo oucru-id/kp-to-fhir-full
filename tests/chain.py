@@ -1,4 +1,4 @@
-"""Run the 2.0 chain (typing -> plasmid -> genomic -> clinical -> link) on the synthetic fixtures."""
+
 import json
 from pathlib import Path
 
