@@ -1,4 +1,4 @@
-"""Clinical metadata parsing and the clinical resources."""
+
 import json
 import re
 
