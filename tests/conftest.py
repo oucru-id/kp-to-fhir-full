@@ -1,4 +1,4 @@
-"""Shared pytest helpers: run the bin/ scripts on the synthetic fixtures."""
+
 import json
 import os
 import subprocess
