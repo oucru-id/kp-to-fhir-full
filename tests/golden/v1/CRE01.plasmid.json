@@ -1,0 +1,217 @@
+{
+  "sample_id": "CRE01",
+  "status": "ok",
+  "assembly_type": "illumina",
+  "confidence": "predicted (short-read)",
+  "tools": {
+    "mob_suite": "3.1.9",
+    "card_db": "CARD_v3.2.9"
+  },
+  "plasmids": [
+    {
+      "cluster_id": "AA001",
+      "secondary_cluster_id": "AA001_A",
+      "replicon_types": [
+        "IncFII(K)",
+        "IncFIB(K)"
+      ],
+      "relaxase_types": [
+        "MOBF"
+      ],
+      "mpf_type": "MPF_F",
+      "orit_types": [
+        "MOBF"
+      ],
+      "predicted_mobility": "conjugative",
+      "size_bp": 9000,
+      "gc": 51.1,
+      "num_contigs": 2,
+      "contigs": [
+        "k141_3_pilon",
+        "k141_6_pilon"
+      ],
+      "mash_nearest_neighbor": "CP011985",
+      "mash_distance": 0.0021,
+      "predicted_host_range": "Enterobacteriaceae",
+      "amr_genes": [
+        "KPC-2",
+        "aac(6')-Ib-cr.v2",
+        "rmtB.v1",
+        "sul1",
+        "dfrA12"
+      ],
+      "carbapenemase_genes": [
+        "KPC-2"
+      ],
+      "esbl_genes": []
+    },
+    {
+      "cluster_id": "AB002",
+      "secondary_cluster_id": null,
+      "replicon_types": [
+        "IncR"
+      ],
+      "relaxase_types": [
+        "MOBP"
+      ],
+      "mpf_type": null,
+      "orit_types": [
+        "MOBP"
+      ],
+      "predicted_mobility": "mobilizable",
+      "size_bp": 5000,
+      "gc": 50.0,
+      "num_contigs": 1,
+      "contigs": [
+        "k141_4_pilon"
+      ],
+      "mash_nearest_neighbor": "MN310379",
+      "mash_distance": 0.0105,
+      "predicted_host_range": "Enterobacteriaceae",
+      "amr_genes": [
+        "CTX-M-15",
+        "qnrS1"
+      ],
+      "carbapenemase_genes": [],
+      "esbl_genes": [
+        "CTX-M-15"
+      ]
+    }
+  ],
+  "gene_locations": {
+    "KPC-2": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AA001",
+          "contig": "k141_3_pilon",
+          "start": 1000,
+          "end": 1870,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "CTX-M-15": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AB002",
+          "contig": "k141_4_pilon",
+          "start": 1200,
+          "end": 2070,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "OXA-1": {
+      "location": "unresolved",
+      "copies": [
+        {
+          "molecule": "unresolved",
+          "cluster_id": null,
+          "contig": "k141_5_pilon",
+          "start": 500,
+          "end": 1370,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "SHV-11": {
+      "location": "chromosome",
+      "copies": [
+        {
+          "molecule": "chromosome",
+          "cluster_id": null,
+          "contig": "k141_1_pilon",
+          "start": 8000,
+          "end": 8870,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "aac(6')-Ib-cr.v2": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AA001",
+          "contig": "k141_6_pilon",
+          "start": 200,
+          "end": 1070,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "rmtB.v1": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AA001",
+          "contig": "k141_6_pilon",
+          "start": 1500,
+          "end": 2370,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "qnrS1": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AB002",
+          "contig": "k141_4_pilon",
+          "start": 3200,
+          "end": 4070,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "sul1": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AA001",
+          "contig": "k141_3_pilon",
+          "start": 3000,
+          "end": 3870,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "dfrA12": {
+      "location": "plasmid",
+      "copies": [
+        {
+          "molecule": "plasmid",
+          "cluster_id": "AA001",
+          "contig": "k141_3_pilon",
+          "start": 4500,
+          "end": 5370,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    },
+    "GyrA p.Ser83Ile": {
+      "location": "chromosome",
+      "copies": []
+    },
+    "ParC p.Ser80Ile": {
+      "location": "chromosome",
+      "copies": []
+    }
+  }
+}

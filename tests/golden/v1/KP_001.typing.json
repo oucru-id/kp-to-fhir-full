@@ -1,0 +1,66 @@
+{
+  "sample_id": "KP_001",
+  "assembly": "KP_001",
+  "mlst": {
+    "sequence_type": "ST15",
+    "clonal_complex": "CC15",
+    "confidence": "High",
+    "alleles": {
+      "gapA": "1",
+      "infB": "1",
+      "mdh": "1",
+      "pgi": "1",
+      "phoE": "1",
+      "rpoB": "1",
+      "tonB": "1"
+    }
+  },
+  "capsule": {
+    "k_locus": "KL24",
+    "k_type": "K24",
+    "k_confidence": "High",
+    "k_problems": "None",
+    "wzi": "wzi24"
+  },
+  "virulence": {
+    "yersiniabactin": "Unknown",
+    "colibactin": "Unknown",
+    "aerobactin": "Unknown",
+    "salmochelin": "Unknown",
+    "hypermucoidy": "Unknown",
+    "rmpa2": "Unknown",
+    "virulence_score": "0"
+  },
+  "resistance": {
+    "acquired_resistance": "None",
+    "esbl": "CTX-M-15",
+    "carbapenemase": "None",
+    "other_resistance": "CTX-M-15, SHV-28",
+    "resistance_score": "1",
+    "num_resistance_classes": "1",
+    "num_resistance_genes": "2",
+    "detailed_resistance": [
+      {
+        "gene": "CTX-M-15",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": false
+      },
+      {
+        "gene": "SHV-28",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": true
+      }
+    ],
+    "point_mutations": []
+  },
+  "o_locus": {
+    "o_locus": "O1/O2v1",
+    "o_type": "O1/O2v1",
+    "o_confidence": "High"
+  },
+  "analysis_type": "K. pneumoniae complete Kleborate analysis"
+}

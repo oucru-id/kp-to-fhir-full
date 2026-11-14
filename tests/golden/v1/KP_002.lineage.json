@@ -1,0 +1,21 @@
+{
+  "sample_id": "KP_002",
+  "lineage": {
+    "sequence_type": "ST45",
+    "clonal_complex": "Unknown",
+    "capsule_type": "K62",
+    "o_type": "O1/O2v1",
+    "wzi_type": "wzi101",
+    "confidence": "MLST: High",
+    "lineage_designation": "ST45",
+    "high_risk_clone": "No",
+    "subspecies": "pneumoniae",
+    "resistance_profile": {
+      "esbl_producer": "No",
+      "carbapenemase_producer": "No",
+      "multidrug_resistant": "No",
+      "risk_level": "Low"
+    }
+  },
+  "analysis_type": "K. pneumoniae Kleborate complete analysis"
+}

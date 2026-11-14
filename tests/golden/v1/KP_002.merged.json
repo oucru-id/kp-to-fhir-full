@@ -1,0 +1,1583 @@
+{
+  "entry": [
+    {
+      "fullUrl": "urn:kpfhir:Organization/99000001",
+      "request": {
+        "method": "PUT",
+        "url": "Organization/99000001"
+      },
+      "resource": {
+        "active": true,
+        "address": [
+          {
+            "city": "Kota Contoh",
+            "country": "ID",
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "province",
+                    "valueCode": "99"
+                  },
+                  {
+                    "url": "city",
+                    "valueCode": "9901"
+                  },
+                  {
+                    "url": "district",
+                    "valueCode": "990101"
+                  }
+                ],
+                "url": "https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode"
+              },
+              {
+                "extension": [
+                  {
+                    "url": "latitude",
+                    "valueDecimal": -7.0001
+                  },
+                  {
+                    "url": "longitude",
+                    "valueDecimal": 110.0001
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/geolocation"
+              }
+            ],
+            "line": [
+              "Jl. Contoh No. 99"
+            ],
+            "state": "Provinsi Uji",
+            "type": "physical",
+            "use": "work"
+          }
+        ],
+        "alias": [
+          "LabSin"
+        ],
+        "id": "99000001",
+        "identifier": [
+          {
+            "system": "http://sys-ids.kemkes.go.id/organization",
+            "use": "official",
+            "value": "99000001"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.kemkes.go.id/r4/StructureDefinition/Organization"
+          ]
+        },
+        "name": "Laboratorium Sintetis",
+        "resourceType": "Organization",
+        "telecom": [
+          {
+            "system": "phone",
+            "use": "work",
+            "value": "+62-800-0000-0000"
+          },
+          {
+            "system": "email",
+            "use": "work",
+            "value": "lab@example.org"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "prov",
+                "display": "Healthcare Provider",
+                "system": "http://terminology.kemkes.go.id/CodeSystem/organization-type"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Practitioner/N99999999",
+      "request": {
+        "method": "PUT",
+        "url": "Practitioner/N99999999"
+      },
+      "resource": {
+        "active": true,
+        "birthDate": "1980-01-01",
+        "gender": "female",
+        "id": "N99999999",
+        "identifier": [
+          {
+            "system": "https://fhir.kemkes.go.id/id/nik",
+            "use": "official",
+            "value": "9900000000000001"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.kemkes.go.id/r4/StructureDefinition/Practitioner"
+          ]
+        },
+        "name": [
+          {
+            "text": "dr. Praktisi Sintetis",
+            "use": "official"
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "STR-KKI",
+                  "display": "Surat Tanda Registrasi Dokter",
+                  "system": "https://terminology.kemkes.go.id/v1-0302"
+                }
+              ],
+              "text": "Surat Tanda Registrasi Dokter"
+            },
+            "identifier": [
+              {
+                "system": "https://fhir.kemkes.go.id/id/str-kki-number",
+                "value": "SYN-STR-0001"
+              }
+            ],
+            "period": {
+              "start": "2020-01-01"
+            }
+          }
+        ],
+        "resourceType": "Practitioner",
+        "telecom": [
+          {
+            "system": "phone",
+            "use": "work",
+            "value": "+62-800-0000-0001"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:PractitionerRole/SYN-ROLE-001",
+      "request": {
+        "method": "PUT",
+        "url": "PractitionerRole/SYN-ROLE-001"
+      },
+      "resource": {
+        "active": true,
+        "code": [
+          {
+            "coding": [
+              {
+                "code": "309343006",
+                "display": "Physician",
+                "system": "http://snomed.info/sct"
+              }
+            ],
+            "text": "Clinical microbiologist"
+          }
+        ],
+        "id": "SYN-ROLE-001",
+        "meta": {
+          "profile": [
+            "https://fhir.kemkes.go.id/r4/StructureDefinition/PractitionerRole"
+          ]
+        },
+        "organization": {
+          "display": "Laboratorium Sintetis",
+          "reference": "Organization/99000001"
+        },
+        "practitioner": {
+          "display": "dr. Praktisi Sintetis",
+          "reference": "Practitioner/N99999999"
+        },
+        "resourceType": "PractitionerRole",
+        "telecom": [
+          {
+            "system": "phone",
+            "use": "work",
+            "value": "+62-800-0000-0001"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Patient/KP-patient",
+      "request": {
+        "method": "PUT",
+        "url": "Patient/KP-patient"
+      },
+      "resource": {
+        "active": true,
+        "gender": "unknown",
+        "id": "KP-patient",
+        "identifier": [
+          {
+            "system": "http://sys-ids.kemkes.go.id/mr/100007732",
+            "type": {
+              "coding": [
+                {
+                  "code": "MR",
+                  "display": "Medical record number",
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                }
+              ]
+            },
+            "use": "usual",
+            "value": "KP"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.kemkes.go.id/r4/StructureDefinition/Patient"
+          ]
+        },
+        "name": [
+          {
+            "family": "Patient",
+            "given": [
+              "KP-KP"
+            ],
+            "use": "official"
+          }
+        ],
+        "resourceType": "Patient"
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Specimen/KP-specimen",
+      "request": {
+        "method": "PUT",
+        "url": "Specimen/KP-specimen"
+      },
+      "resource": {
+        "collection": {
+          "collectedDateTime": "<TIMESTAMP>",
+          "collector": {
+            "display": "dr. Praktisi Sintetis",
+            "reference": "Practitioner/N99999999"
+          },
+          "method": {
+            "coding": [
+              {
+                "code": "SWA",
+                "display": "Swab",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0488"
+              }
+            ],
+            "text": "Clinical specimen collection"
+          },
+          "quantity": {
+            "code": "mL",
+            "system": "http://unitsofmeasure.org",
+            "unit": "mL",
+            "value": 1.0
+          }
+        },
+        "id": "KP-specimen",
+        "identifier": [
+          {
+            "system": "http://sys-ids.kemkes.go.id/specimen/99000001",
+            "value": "SPEC-KP-KP"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "https://fhir.kemkes.go.id/r4/StructureDefinition/Specimen"
+          ]
+        },
+        "note": [
+          {
+            "text": "Collected clinical specimen from KP Patient KP (KP) for Klebsiella pneumoniae genomic testing"
+          }
+        ],
+        "receivedTime": "<TIMESTAMP>",
+        "resourceType": "Specimen",
+        "status": "available",
+        "subject": {
+          "display": "KP Patient KP",
+          "reference": "Patient/KP-patient"
+        },
+        "type": {
+          "coding": [
+            {
+              "code": "119303007",
+              "display": "Microbial isolate specimen",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Microbial isolate specimen for KP testing"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:ServiceRequest/KP-service-request",
+      "request": {
+        "method": "PUT",
+        "url": "ServiceRequest/KP-service-request"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "108252007",
+                "display": "Laboratory procedure",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Klebsiella pneumoniae Genomic Analysis"
+        },
+        "encounter": {
+          "display": "KP Testing Encounter",
+          "reference": "Encounter/KP-encounter"
+        },
+        "id": "KP-service-request",
+        "identifier": [
+          {
+            "system": "http://sys-ids.kemkes.go.id/servicerequest/99000001",
+            "value": "SR-KP-KP"
+          }
+        ],
+        "intent": "original-order",
+        "meta": {
+          "profile": [
+            "https://fhir.kemkes.go.id/r4/StructureDefinition/ServiceRequest"
+          ]
+        },
+        "occurrenceDateTime": "<TIMESTAMP>",
+        "performer": [
+          {
+            "display": "Laboratory Technician",
+            "reference": "PractitionerRole/SYN-ROLE-001"
+          }
+        ],
+        "priority": "routine",
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "code": "56415008",
+                "display": "Klebsiella pneumoniae",
+                "system": "http://snomed.info/sct"
+              }
+            ],
+            "text": "Antimicrobial resistance screening for Klebsiella pneumoniae"
+          }
+        ],
+        "requester": {
+          "display": "dr. Praktisi Sintetis",
+          "reference": "Practitioner/N99999999"
+        },
+        "resourceType": "ServiceRequest",
+        "status": "active",
+        "subject": {
+          "display": "KP Patient KP",
+          "reference": "Patient/KP-patient"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:DiagnosticReport/KP-genomic-report",
+      "request": {
+        "method": "PUT",
+        "url": "DiagnosticReport/KP-genomic-report"
+      },
+      "resource": {
+        "basedOn": [
+          {
+            "reference": "ServiceRequest/KP-service-request"
+          }
+        ],
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "81247-9",
+              "display": "Master HL7 genetic variant reporting panel",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Klebsiella pneumoniae Genomic Analysis Report"
+        },
+        "conclusion": "No acquired resistance genes detected. Intrinsic ampicillin resistance only. MLST ST45. Capsule type: K62.",
+        "conclusionCode": [
+          {
+            "coding": [
+              {
+                "code": "KP-SO",
+                "display": "Klebsiella pneumoniae Sensitif Obat",
+                "system": "http://terminology.kemkes.go.id/CodeSystem/clinical-term"
+              }
+            ],
+            "text": "Susceptible"
+          },
+          {
+            "text": "MLST ST45"
+          },
+          {
+            "text": "O-antigen O1/O2v1"
+          },
+          {
+            "text": "Capsule K62"
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "encounter": {
+          "display": "KP Testing Encounter",
+          "reference": "Encounter/KP-encounter"
+        },
+        "id": "KP-genomic-report",
+        "identifier": [
+          {
+            "system": "http://sys-ids.kemkes.go.id/diagnostic-report/99000001",
+            "value": "KP-GEN-KP-<DATE>"
+          }
+        ],
+        "issued": "<TIMESTAMP>",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomics-report"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "display": "Laboratorium Sintetis",
+            "reference": "Organization/99000001"
+          },
+          {
+            "display": "dr. Praktisi Sintetis",
+            "reference": "Practitioner/N99999999"
+          }
+        ],
+        "presentedForm": [
+          {
+            "contentType": "text/html",
+            "data": "base64-decoded:<div xmlns=\"http://www.w3.org/1999/xhtml\">\n<h1>Klebsiella pneumoniae Genomic Analysis Report</h1>\n<p><strong>Patient:</strong> KP Patient KP</p>\n<p><strong>Sample ID:</strong> KP</p>\n<p><strong>Report Date:</strong> <TIMESTAMP></p>\n<p><strong>Resistance Classification:</strong> Susceptible</p><p><strong>MLST Sequence Type:</strong> ST45</p><p><strong>Capsule Type:</strong> K62</p><p><strong>Conclusion:</strong> No acquired resistance genes detected. Intrinsic ampicillin resistance only. MLST ST45. Capsule type: K62.</p><hr/><div xmlns=\"http://www.w3.org/1999/xhtml\">\n                <strong>Core Genome MLST Analysis</strong><br/>\n                Called Loci: 8/8 (100.0%)<br/>\n                Detailed allele profile included in components.\n                </div><h2>Detected Resistance Genes</h2><ul><li>SHV-1</li></ul><h2>MLST Allele Profile</h2><ul><li>gapA: 2</li><li>infB: 1</li><li>mdh: 1</li><li>pgi: 6</li><li>phoE: 7</li><li>rpoB: 1</li><li>tonB: 12</li></ul></div>",
+            "language": "en-US",
+            "title": "Klebsiella pneumoniae Genomic Analysis Report"
+          }
+        ],
+        "resourceType": "DiagnosticReport",
+        "result": [
+          {
+            "reference": "Observation/KP-resistance-1"
+          },
+          {
+            "reference": "Observation/KP-mlst"
+          },
+          {
+            "reference": "Observation/KP-virulence-score"
+          },
+          {
+            "reference": "Observation/KP-capsule"
+          },
+          {
+            "reference": "Observation/KP-o-antigen"
+          },
+          {
+            "reference": "Observation/KP-susceptibility-panel"
+          },
+          {
+            "reference": "Observation/KP-cgmlst"
+          }
+        ],
+        "specimen": [
+          {
+            "display": "Clinical specimen from KP Patient KP",
+            "reference": "Specimen/KP-specimen"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "display": "KP Patient KP",
+          "reference": "Patient/KP-patient"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-resistance-1",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-resistance-1"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "69548-6",
+              "display": "Genetic variant assessment",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Resistance Variant: SHV-1"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "48018-6",
+                  "display": "Gene studied [ID]",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "SHV-1",
+                  "display": "SHV-1",
+                  "system": "http://www.genenames.org/geneId"
+                }
+              ],
+              "text": "SHV-1"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "51961-1",
+                  "display": "Genetic variation's effect on drug efficacy",
+                  "system": "http://loinc.org"
+                }
+              ]
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "765422000",
+                  "display": "Product containing beta-lactam (product)",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "beta-lactam"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-resistance-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KP-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resistance gene SHV-1 - narrow-spectrum β-lactamase (intrinsic chromosomal) - KP MLST: ST45 - Capsule: K62</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LA9633-4",
+              "display": "Present",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Present"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-mlst",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-mlst"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "612-2",
+              "display": "Bacterial strain [Type] in Isolate by Bacteria subtyping",
+              "system": "http://loinc.org"
+            }
+          ]
+        },
+        "component": [
+          {
+            "code": {
+              "text": "MLST allele gapA"
+            },
+            "valueString": "2"
+          },
+          {
+            "code": {
+              "text": "MLST allele infB"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele mdh"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele pgi"
+            },
+            "valueString": "6"
+          },
+          {
+            "code": {
+              "text": "MLST allele phoE"
+            },
+            "valueString": "7"
+          },
+          {
+            "code": {
+              "text": "MLST allele rpoB"
+            },
+            "valueString": "1"
+          },
+          {
+            "code": {
+              "text": "MLST allele tonB"
+            },
+            "valueString": "12"
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-mlst",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KP-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae MLST ST45. Alleles: gapA 2, infB 1, mdh 1, pgi 6, phoE 7, rpoB 1, tonB 12</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "45",
+              "display": "Klebsiella pneumoniae MLST ST45",
+              "system": "http://kaptive.holtlab.net/mlst"
+            }
+          ],
+          "text": "ST45"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-virulence-score",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-virulence-score"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "SP000680",
+              "display": "Klebsiella pneumoniae virulence score [Numeric] by genomic analysis",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ],
+          "text": "Virulence score"
+        },
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-virulence-score",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KP-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Virulence score: 0</div>",
+          "status": "generated"
+        },
+        "valueQuantity": {
+          "code": "score",
+          "system": "http://unitsofmeasure.org",
+          "unit": "score",
+          "value": 0
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-capsule",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-capsule"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "SP000678",
+              "display": "Klebsiella pneumoniae capsular type [Identifier] by genomic analysis",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ],
+          "text": "Capsule Type"
+        },
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-capsule",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KP-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae capsule type K62</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "K62",
+              "display": "Klebsiella capsule type K62",
+              "system": "http://kaptive.holtlab.net/capsule"
+            }
+          ],
+          "text": "K62"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-o-antigen",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-o-antigen"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "612-2",
+              "display": "Bacterial strain [Type] in Isolate by Bacteria subtyping",
+              "system": "http://loinc.org"
+            }
+          ]
+        },
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-o-antigen",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KP-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Klebsiella pneumoniae O-antigen type O1/O2v1</div>",
+          "status": "generated"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "O1/O2v1",
+              "display": "Klebsiella pneumoniae O1/O2v1",
+              "system": "http://kaptive.holtlab.net/o-antigen"
+            }
+          ],
+          "text": "O1/O2v1"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-susceptibility-panel",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-susceptibility-panel"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "GE",
+                "display": "Genetics",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "29576-6",
+              "display": "Bacterial susceptibility panel",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Klebsiella pneumoniae Susceptibility Panel (Genotypic Prediction)"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18864-9",
+                  "display": "Ampicillin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Ampicillin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA6676-6",
+                  "display": "Resistant",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Resistant"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18861-5",
+                  "display": "Amoxicillin-Clavulanate [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Amoxicillin-Clavulanate"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18970-4",
+                  "display": "Piperacillin-Tazobactam [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Piperacillin-Tazobactam"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18876-3",
+                  "display": "Cefotaxime [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Cefotaxime"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18879-7",
+                  "display": "Ceftazidime [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Ceftazidime"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18879-7",
+                  "display": "Cefepime [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Cefepime"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18943-1",
+                  "display": "Meropenem [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Meropenem"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18906-8",
+                  "display": "Ciprofloxacin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Ciprofloxacin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18928-2",
+                  "display": "Gentamicin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Gentamicin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18860-7",
+                  "display": "Amikacin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Amikacin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18998-5",
+                  "display": "Trimethoprim-Sulfamethoxazole [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Trimethoprim-Sulfamethoxazole"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "18912-6",
+                  "display": "Colistin [Susceptibility]",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Colistin"
+            },
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "LA24225-7",
+                  "display": "Susceptible",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "text": "Susceptible"
+            }
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-susceptibility-panel",
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "code": "N",
+                "display": "Normal",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+              }
+            ],
+            "text": "No acquired resistance detected"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "specimen": {
+          "reference": "Specimen/KP-specimen"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n    <h3>Klebsiella pneumoniae Predicted Susceptibility Panel</h3>\n    <p><strong>Sample:</strong> KP</p>\n    <p><strong>Method:</strong> Whole Genome Sequencing - Genotypic Prediction</p>\n    <p><strong>Panel:</strong> 12 antimicrobials</p>\n    <p><strong>Summary:</strong> 1 Resistant (including 1 intrinsic), 11 Susceptible</p>\n    <table border=\"1\">\n        <tr><th>Antimicrobial</th><th>Predicted Result</th></tr>\n        <tr><td>Ampicillin</td><td><strong>Resistant</strong></td></tr><tr><td>Amoxicillin-Clavulanate</td><td><strong>Susceptible</strong></td></tr><tr><td>Piperacillin-Tazobactam</td><td><strong>Susceptible</strong></td></tr><tr><td>Cefotaxime</td><td><strong>Susceptible</strong></td></tr><tr><td>Ceftazidime</td><td><strong>Susceptible</strong></td></tr><tr><td>Cefepime</td><td><strong>Susceptible</strong></td></tr><tr><td>Meropenem</td><td><strong>Susceptible</strong></td></tr><tr><td>Ciprofloxacin</td><td><strong>Susceptible</strong></td></tr><tr><td>Gentamicin</td><td><strong>Susceptible</strong></td></tr><tr><td>Amikacin</td><td><strong>Susceptible</strong></td></tr><tr><td>Trimethoprim-Sulfamethoxazole</td><td><strong>Susceptible</strong></td></tr><tr><td>Colistin</td><td><strong>Susceptible</strong></td></tr>\n    </table>\n    </div>",
+          "status": "generated"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:kpfhir:Observation/KP-cgmlst",
+      "request": {
+        "method": "PUT",
+        "url": "Observation/KP-cgmlst"
+      },
+      "resource": {
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "laboratory",
+                "display": "Laboratory",
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "code": "SP000682",
+              "display": "Core genome MLST [Type] in Isolate by Sequencing",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ],
+          "text": "Core Genome MLST Profile"
+        },
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "SP000690",
+                  "display": "Loci called",
+                  "system": "http://terminology.kemkes.go.id/sp"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "code": "1",
+              "system": "http://unitsofmeasure.org",
+              "unit": "{count}",
+              "value": 8
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "SP000691",
+                  "display": "Total loci in scheme",
+                  "system": "http://terminology.kemkes.go.id/sp"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "code": "1",
+              "system": "http://unitsofmeasure.org",
+              "unit": "{count}",
+              "value": 8
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "SP000692",
+                  "display": "Call rate",
+                  "system": "http://terminology.kemkes.go.id/sp"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "code": "%",
+              "system": "http://unitsofmeasure.org",
+              "unit": "%",
+              "value": 100.0
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00005",
+                  "display": "KP1_RS00005",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 2
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00010",
+                  "display": "KP1_RS00010",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 2
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00015",
+                  "display": "KP1_RS00015",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 5
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00020",
+                  "display": "KP1_RS00020",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 4
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00025",
+                  "display": "KP1_RS00025",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 1
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00030",
+                  "display": "KP1_RS00030",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 1
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00035",
+                  "display": "KP1_RS00035",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 4
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "code": "KP1_RS00040",
+                  "display": "KP1_RS00040",
+                  "system": "https://www.cgmlst.org/ncs"
+                }
+              ]
+            },
+            "valueInteger": 3
+          }
+        ],
+        "effectiveDateTime": "<TIMESTAMP>",
+        "id": "KP-cgmlst",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/Observation"
+          ],
+          "tag": [
+            {
+              "code": "genomics",
+              "display": "Genomics",
+              "system": "http://terminology.kemkes.go.id/sp"
+            }
+          ]
+        },
+        "performer": [
+          {
+            "reference": "Organization/99000001"
+          }
+        ],
+        "resourceType": "Observation",
+        "status": "final",
+        "subject": {
+          "reference": "Patient/KP-patient"
+        },
+        "text": {
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n                <strong>Core Genome MLST Analysis</strong><br/>\n                Called Loci: 8/8 (100.0%)<br/>\n                Detailed allele profile included in components.\n                </div>",
+          "status": "generated"
+        }
+      }
+    }
+  ],
+  "id": "<BUNDLE-ID>",
+  "meta": {
+    "lastUpdated": "<TIMESTAMP>",
+    "profile": [
+      "https://fhir.kemkes.go.id/r4/StructureDefinition/Bundle"
+    ]
+  },
+  "resourceType": "Bundle",
+  "timestamp": "<TIMESTAMP>",
+  "type": "transaction"
+}

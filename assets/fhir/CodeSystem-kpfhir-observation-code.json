@@ -1,0 +1,45 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "kpfhir-observation-code",
+  "url": "http://terminology.spheres.id/CodeSystem/kpfhir-observation-code",
+  "version": "2.0.0",
+  "name": "KpfhirObservationCode",
+  "title": "KPtoFHIR observation codes",
+  "status": "active",
+  "experimental": false,
+  "publisher": "OUCRU Indonesia - KPtoFHIR",
+  "description": "Observation and component codes for results that have no LOINC or SNOMED CT code: sequencing QC, capsule type, Kleborate virulence score and the chewBBACA cgMLST profile.",
+  "caseSensitive": true,
+  "content": "complete",
+  "count": 7,
+  "concept": [
+    {
+      "code": "sequencing-qc",
+      "display": "Sequencing quality control"
+    },
+    {
+      "code": "capsule-type",
+      "display": "Klebsiella pneumoniae capsular type by genomic analysis"
+    },
+    {
+      "code": "virulence-score",
+      "display": "Klebsiella pneumoniae virulence score by genomic analysis"
+    },
+    {
+      "code": "cgmlst-profile",
+      "display": "Core genome MLST profile by sequencing"
+    },
+    {
+      "code": "cgmlst-loci-called",
+      "display": "Core genome MLST loci called"
+    },
+    {
+      "code": "cgmlst-loci-total",
+      "display": "Core genome MLST loci in scheme"
+    },
+    {
+      "code": "cgmlst-call-rate",
+      "display": "Core genome MLST call rate"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+CRE01	chromosome	-	-	k141_1_pilon	22000	50.13	02f58d0619947ad0af2dd74ee39636e7	not tested	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+CRE01	chromosome	-	-	k141_2_pilon	21000	50.38	b2cf5ee1445173688691a763c0429f16	not tested	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+CRE01	plasmid	AA001	AA001_A	k141_3_pilon	6000	50.98	a171bad066b29196602dc3b4d5b25aa8	not tested	IncFII(K),IncFIB(K)	-	MOBF	-	MPF_F	-	MOBF	-	conjugative	CP011985	0.0021	-	-	-	-
+CRE01	plasmid	AB002	-	k141_4_pilon	5000	50.00	1524747f6cea837624cb79a8462476a8	not tested	IncR	-	MOBP	-	-	-	MOBP	-	mobilizable	MN310379	0.0105	-	-	-	-
+CRE01	chromosome	-	-	k141_5_pilon	2500	49.48	f254fb76363be0ddd1dc27a83cf17676	not tested	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+CRE01	plasmid	AA001	AA001_A	k141_6_pilon	3000	51.33	dd3833f6c7b51a6159a421ea73677f7e	not tested	IncFII(K),IncFIB(K)	-	MOBF	-	MPF_F	-	MOBF	-	conjugative	CP011985	0.0021	-	-	-	-

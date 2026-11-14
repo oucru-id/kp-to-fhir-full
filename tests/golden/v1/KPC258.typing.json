@@ -1,0 +1,106 @@
+{
+  "sample_id": "KPC258",
+  "assembly": "KPC258",
+  "mlst": {
+    "sequence_type": "ST258",
+    "clonal_complex": "CC258",
+    "confidence": "High",
+    "alleles": {
+      "gapA": "3",
+      "infB": "3",
+      "mdh": "1",
+      "pgi": "1",
+      "phoE": "1",
+      "rpoB": "1",
+      "tonB": "79"
+    }
+  },
+  "capsule": {
+    "k_locus": "KL106",
+    "k_type": "unknown (KL106)",
+    "k_confidence": "High",
+    "k_problems": "None",
+    "wzi": "wzi29"
+  },
+  "virulence": {
+    "yersiniabactin": "Unknown",
+    "colibactin": "Unknown",
+    "aerobactin": "Unknown",
+    "salmochelin": "Unknown",
+    "hypermucoidy": "Unknown",
+    "rmpa2": "Unknown",
+    "virulence_score": "0"
+  },
+  "resistance": {
+    "acquired_resistance": "aac(6')-Ib.v1, aadA2, sul1, dfrA12",
+    "esbl": "None",
+    "carbapenemase": "KPC-3",
+    "other_resistance": "KPC-3, SHV-11^, aac(6')-Ib.v1, aadA2, sul1, dfrA12",
+    "resistance_score": "3",
+    "num_resistance_classes": "4",
+    "num_resistance_genes": "6",
+    "detailed_resistance": [
+      {
+        "gene": "KPC-3",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": false
+      },
+      {
+        "gene": "SHV-11^",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": true
+      },
+      {
+        "gene": "aac(6')-Ib.v1",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "aadA2",
+        "drug_class": "agly",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "sul1",
+        "drug_class": "sul",
+        "identity": "100%",
+        "coverage": "100%"
+      },
+      {
+        "gene": "dfrA12",
+        "drug_class": "tmt",
+        "identity": "100%",
+        "coverage": "100%"
+      }
+    ],
+    "point_mutations": [
+      {
+        "gene": "OmpK35",
+        "mutation": "-25%",
+        "type": "point_mutation"
+      },
+      {
+        "gene": "OmpK36",
+        "mutation": "GD",
+        "type": "point_mutation"
+      },
+      {
+        "gene": "MgrB",
+        "mutation": "-62%",
+        "type": "point_mutation"
+      }
+    ]
+  },
+  "o_locus": {
+    "o_locus": "O2a",
+    "o_type": "O2a",
+    "o_confidence": "High"
+  },
+  "analysis_type": "K. pneumoniae complete Kleborate analysis"
+}

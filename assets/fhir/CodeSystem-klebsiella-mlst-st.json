@@ -1,0 +1,14 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "klebsiella-mlst-st",
+  "url": "http://terminology.spheres.id/CodeSystem/klebsiella-mlst-st",
+  "version": "2.0.0",
+  "name": "KlebsiellaMlstSt",
+  "title": "Klebsiella pneumoniae MLST sequence types",
+  "status": "active",
+  "experimental": false,
+  "publisher": "OUCRU Indonesia - KPtoFHIR",
+  "description": "Sequence types of the 7-locus K. pneumoniae MLST scheme (Institut Pasteur BIGSdb) as reported by Kleborate. The code is the ST number without the 'ST' prefix, e.g. 11 for ST11.",
+  "caseSensitive": true,
+  "content": "not-present"
+}

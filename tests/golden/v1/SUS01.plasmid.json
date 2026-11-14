@@ -1,0 +1,27 @@
+{
+  "sample_id": "SUS01",
+  "status": "no_plasmids",
+  "assembly_type": "illumina",
+  "confidence": "predicted (short-read)",
+  "tools": {
+    "mob_suite": "3.1.9",
+    "card_db": "CARD_v3.2.9"
+  },
+  "plasmids": [],
+  "gene_locations": {
+    "SHV-1": {
+      "location": "unresolved",
+      "copies": [
+        {
+          "molecule": "unresolved",
+          "cluster_id": null,
+          "contig": "k141_2_pilon",
+          "start": 300,
+          "end": 1170,
+          "identity": 100.0,
+          "coverage": 100.0
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "kp-plasmid",
+  "url": "http://terminology.spheres.id/CodeSystem/kp-plasmid",
+  "version": "2.0.0",
+  "name": "KpPlasmid",
+  "title": "KPtoFHIR plasmid analysis codes",
+  "status": "active",
+  "experimental": false,
+  "publisher": "OUCRU Indonesia - KPtoFHIR",
+  "description": "Observation and component codes for the MOB-suite plasmid analysis and the genomic location (plasmid, chromosome, unresolved) of resistance genes.",
+  "caseSensitive": true,
+  "content": "complete",
+  "count": 3,
+  "concept": [
+    {
+      "code": "plasmid-analysis",
+      "display": "Plasmid analysis"
+    },
+    {
+      "code": "plasmid",
+      "display": "Plasmid identified"
+    },
+    {
+      "code": "genomic-location",
+      "display": "Genomic location"
+    }
+  ]
+}

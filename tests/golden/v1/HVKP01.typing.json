@@ -1,0 +1,59 @@
+{
+  "sample_id": "HVKP01",
+  "assembly": "HVKP01",
+  "mlst": {
+    "sequence_type": "ST23",
+    "clonal_complex": "CC23",
+    "confidence": "High",
+    "alleles": {
+      "gapA": "2",
+      "infB": "1",
+      "mdh": "1",
+      "pgi": "1",
+      "phoE": "9",
+      "rpoB": "4",
+      "tonB": "12"
+    }
+  },
+  "capsule": {
+    "k_locus": "KL1",
+    "k_type": "K1",
+    "k_confidence": "High",
+    "k_problems": "None",
+    "wzi": "wzi1"
+  },
+  "virulence": {
+    "yersiniabactin": "ybt 1; ICEKp10",
+    "colibactin": "clb 2",
+    "aerobactin": "iuc 1",
+    "salmochelin": "iro 1",
+    "hypermucoidy": "rmp 1; KpVP-1",
+    "rmpa2": "rmpA2_3-47%",
+    "virulence_score": "5"
+  },
+  "resistance": {
+    "acquired_resistance": "None",
+    "esbl": "None",
+    "carbapenemase": "None",
+    "other_resistance": "SHV-1",
+    "resistance_score": "0",
+    "num_resistance_classes": "1",
+    "num_resistance_genes": "1",
+    "detailed_resistance": [
+      {
+        "gene": "SHV-1",
+        "drug_class": "beta-lactam",
+        "identity": "100%",
+        "coverage": "100%",
+        "intrinsic": true
+      }
+    ],
+    "point_mutations": []
+  },
+  "o_locus": {
+    "o_locus": "O1/O2v2",
+    "o_type": "O1/O2v2",
+    "o_confidence": "High"
+  },
+  "analysis_type": "K. pneumoniae complete Kleborate analysis"
+}

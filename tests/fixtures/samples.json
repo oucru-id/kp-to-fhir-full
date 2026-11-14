@@ -1,0 +1,42 @@
+{
+  "CRE01": {
+    "plasmid": true,
+    "platform": "illumina",
+    "qc": false
+  },
+  "EMPTY01": {
+    "plasmid": false,
+    "platform": "illumina",
+    "qc": false
+  },
+  "HVKP01": {
+    "plasmid": true,
+    "platform": "ont",
+    "qc": true
+  },
+  "KPC258": {
+    "plasmid": false,
+    "platform": "illumina",
+    "qc": false
+  },
+  "KP_001": {
+    "plasmid": false,
+    "platform": "illumina",
+    "qc": false
+  },
+  "KP_002": {
+    "plasmid": false,
+    "platform": "illumina",
+    "qc": false
+  },
+  "NOVEL01": {
+    "plasmid": true,
+    "platform": "ont",
+    "qc": true
+  },
+  "SUS01": {
+    "plasmid": true,
+    "platform": "illumina",
+    "qc": false
+  }
+}
