@@ -1,4 +1,4 @@
-"""The link step: reference integrity, missing clinical data, POST mode, external refs."""
+
 import json
 
 import pytest
