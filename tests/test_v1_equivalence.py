@@ -1,9 +1,4 @@
-"""P2 gate: --fhir_profile satusehat reproduces v1.4.2 except for the allowlist.
 
-The v1 goldens (tests/golden/v1/) were produced by tests/compat/run_v1.py
-from the baseline commit. KP_001 / KP_002 are excluded: v1 merged both into
-sample "KP" (see tests/test_ids.py).
-"""
 import pytest
 
 from chain import read, run_all
