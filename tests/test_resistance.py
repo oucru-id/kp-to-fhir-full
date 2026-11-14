@@ -1,4 +1,4 @@
-"""Resistance classification and the genotypic susceptibility panel, as tables."""
+
 import pytest
 
 from kpfhir_resistance import classify_resistance_profile, conclusion_coding, predict_panel
