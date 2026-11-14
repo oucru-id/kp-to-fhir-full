@@ -1,23 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the v1 equivalence goldens from the baseline commit.
 
-The baseline is the local v1.4.2 state imported into this repository (see
-tests/compat/BASELINE). Its scripts are extracted with ``git show`` into a
-temporary directory and run on the synthetic fixtures exactly the way the
-v1 pipeline ran them:
-
-1. parse_results: the inline Python block of workflows/typing.nf
-2. PARSE_PLASMIDS: parse_plasmids.py on the MOB-suite fixtures
-3. CREATE_FHIR: annotated_to_fhir.py with cgMLST, plasmid and QC inputs
-4. MERGE_CLINICAL_FHIR: merge_clinical_fhir.py with all three metadata CSVs
-
-The baseline scripts need pandas, so pass an interpreter that has it:
-
-    python3 tests/compat/run_v1.py --python ~/medaka-env/bin/python
-
-Outputs go to tests/golden/v1/: typing, lineage and plasmid JSON as written,
-FHIR bundles normalised (see tests/normalize.py).
-"""
 import argparse
 import json
 import shutil
@@ -29,7 +11,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "tests"))
-from normalize import dumps, normalize_bundle  # noqa: E402
+from normalize import dumps, normalize_bundle 
 
 FIXTURES = REPO / "tests" / "fixtures"
 SCRIPTS = ["annotated_to_fhir.py", "merge_clinical_fhir.py", "clinical_metadata_parser.py", "kp_codes.py",
