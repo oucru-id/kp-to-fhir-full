@@ -61,6 +61,8 @@ Notes for container runs:
 - The Python image has no `openpyxl`, so give `.xlsx` clinical metadata as CSV, or use
   `-profile conda`.
 - medaka runs on the CPU in containers. It retries on the CPU if GPU inference fails.
+- medaka downloads its model (`--medaka_model`) on first use in each task, so Nanopore samples
+  need internet access.
 
 ## Quick start
 

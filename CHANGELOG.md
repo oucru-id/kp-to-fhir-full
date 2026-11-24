@@ -20,6 +20,10 @@ microdilution).
   longer predicts resistance. Houston specificity 70% to 83%; Tamma 79% to 93%.
 - **Ceftazidime** uses LOINC 18893-8 (Ceftazidime [Susceptibility]); it shared 18879-7 with
   cefepime.
+- **Medaka polishing works in containers.** In 2.0.0, medaka could not install its model inside the
+  container (read-only package folder, no writable `$HOME` under `-u $(id -u):$(id -g)`), so
+  every Nanopore assembly stayed unpolished. The process now sets `HOME` to the task folder, where
+  medaka downloads the model on first use; the task needs internet access for that download.
 - **Unpolished Nanopore assemblies.** When medaka fails, the sequencing QC status is `FAIL`, and
   frameshift, insertion and deletion mutation calls are withheld from the panel and the variant
   Observations, with a QC warning giving their number. Base-call errors in unpolished assemblies
