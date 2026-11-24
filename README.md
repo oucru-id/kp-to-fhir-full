@@ -35,8 +35,8 @@ The results are HL7 FHIR R4 resources conforming to the
     a third step.
 - **Two FHIR profiles**:
   - `generic` (default): plain HL7 Genomics Reporting.
-  - `satusehat`: output for the Indonesian Ministry of Health SATUSEHAT
-    platform (Kemkes profiles, NIK identifiers, SP and KP-SO/KP-RL codes).
+  - `satusehat`: output for the Indonesian SATUSEHAT
+    platform.
 
 ## Requirements
 
@@ -50,17 +50,12 @@ You need [Nextflow](https://www.nextflow.io/) ≥ 25.04 and **one** of the follo
 | `-profile conda` (or `mamba`) | pinned bioconda / conda-forge packages |
 | none | tools already on `PATH` |
 
-| Step | Tools |
-|---|---|
-| Illumina | FastQC 0.12.1, fastp 0.23.4, SPAdes 4.3.0, bwa 0.7.17, samtools 1.21, Pilon 1.24 |
-| ONT | chopper 0.12.0, NanoPlot 1.48.0, Flye 2.9.6, medaka 2.1.0 |
-| typing, plasmid, cgMLST | Kleborate 3.2.4, MOB-suite 3.1.9, minimap2 2.26, chewBBACA 3.4.2 |
-| other | MultiQC 1.30, Python 3.12 (standard library only), Java 21 |
-
 Notes for container runs:
 - The Python image has no `openpyxl`, so give `.xlsx` clinical metadata as CSV, or use
   `-profile conda`.
 - medaka runs on the CPU in containers. It retries on the CPU if GPU inference fails.
+- medaka downloads its model (`--medaka_model`) on first use in each task, so Nanopore samples
+  need internet access.
 
 ## Quick start
 
@@ -84,7 +79,7 @@ KP0003,fasta,,,/data/KP0003.fasta
 ```
 
 ```bash
-nextflow run oucru-id/kp-to-fhir-full -r v2.0.0 -profile docker --input samplesheet.csv --outdir results
+nextflow run oucru-id/kp-to-fhir-full -r v2.0.1 -profile docker --input samplesheet.csv --outdir results
 ```
 
 Sample ids:
@@ -149,10 +144,6 @@ A sample with no row in the patient table gets a genomic bundle only:
   - SNOMED CT conclusion codes where one exists, otherwise text;
   - bacterial genes as text, not HGNC codes;
   - the project CodeSystems in `assets/fhir/` for capsule, O antigen, ST, plasmid and QC codes.
-- `--fhir_profile satusehat` keeps v1.4's content:
-  - Kemkes StructureDefinitions, `genomics` tags and `sys-ids.kemkes.go.id` identifiers;
-  - NIK and the administrative-code and citizenship extensions;
-  - SP000678/680/682 and SP000681/683/687, and KP-SO / KP-RL;
 
 
 ### Validation
@@ -162,8 +153,6 @@ and the project CodeSystems in `assets/fhir/`.
 - Results: `fhir/validation/validation_summary.tsv`.
 - Validation runs offline by default (`--fhir_tx_server n/a`), so no codes are sent to a public
   terminology server. Code checks that need a server are reported as not performed.
-- A validation error stops the run for `generic` and only warns for `satusehat`, because the
-  validator cannot resolve the Kemkes profiles. Override with `--fail_on_validation_error true|false`.
 - `--skip_fhir_validation` skips the step.
 
 ### Upload
@@ -190,15 +179,6 @@ Further options:
 
 All parameters are described in [nextflow_schema.json](nextflow_schema.json) and listed by
 `nextflow run . --help`.
-
-On Nextflow 25.04 and 25.10, a command-line value that looks like a number is turned into one,
-so leading zeros are lost (`--performer_org_id 0123` becomes `123`). Give such ids in a params
-file instead:
-
-```bash
-printf 'performer_org_id: "0123"\n' > params.yml
-nextflow run . -params-file params.yml --input samplesheet.csv
-```
 
 The most used:
 
@@ -233,20 +213,6 @@ results/
     ├── bundle/         <id>.bundle.fhir.json, link_summary.tsv    (personal data)
     ├── validation/     validation_summary.tsv, validation_<n>.json (validator output per batch)
     └── upload/         <id>.bundle.upload.json
-```
-
-## Repository layout
-
-```
-main.nf  workflows/kpfhir.nf  subworkflows/local/  modules/local/   Nextflow code
-bin/                  Python steps (Kleborate parsing, plasmids, QC, FHIR genomic / clinical / link, upload)
-conf/                 resources, output layout, test profiles
-assets/               samplesheet schema, FHIR CodeSystems, metadata templates
-tools/cgmlst/         build the chewBBACA schema
-tools/satusehat/      SATUSEHAT token helper
-tools/dev/            PHI / credential guard
-tests/                pytest suite, synthetic fixtures
-docs/                 clinical metadata guide
 ```
 
 ## Support

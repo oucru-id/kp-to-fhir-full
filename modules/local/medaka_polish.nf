@@ -16,6 +16,7 @@ process MEDAKA_POLISH {
     """
     mv ${raw_assembly} raw_input.fasta
     mkdir -p medaka_work
+    export HOME=\$PWD
 
     set +e
     medaka_consensus -i ${reads} -d raw_input.fasta -o medaka_work -t ${task.cpus} -m ${params.medaka_model} -b ${params.medaka_batch_size}

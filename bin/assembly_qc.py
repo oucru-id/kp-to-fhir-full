@@ -31,7 +31,8 @@ def main():
     else:
         coverage_status = 'PASS'
 
-    if args.polishing != 'polished':
+    unpolished = args.polishing != 'polished'
+    if unpolished:
         warnings.append(f'{args.polishing_tool} polishing failed, so the unpolished assembly was used')
 
     qc = {
@@ -43,7 +44,7 @@ def main():
         'polishing': args.polishing,
         'polishing_tool': args.polishing_tool,
         'polishing_model': args.polishing_model or None,
-        'status': 'WARNING' if warnings else 'PASS',
+        'status': 'FAIL' if unpolished else 'WARNING' if warnings else 'PASS',
         'warnings': warnings,
     }
     with open(args.output, 'w') as f:

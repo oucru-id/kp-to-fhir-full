@@ -1,7 +1,7 @@
 
 import pytest
 
-from kpfhir_resistance import classify_resistance_profile, conclusion_coding, predict_panel
+from kpfhir_resistance import classify_resistance_profile, conclusion_coding, predict_panel, withhold_indel_mutations
 
 
 def gene_obs(gene, drug_class, intrinsic=False):
@@ -77,12 +77,23 @@ def resistant(panel):
     (typing([("rmtB.v1", "agly")]), ["Amikacin", "Ampicillin", "Gentamicin"]),
     (typing([("aac(3)-IIa.v1^", "agly")]), ["Ampicillin", "Gentamicin"]),
     (typing([("aph(3')-Ia.v1", "agly")]), ["Ampicillin"]),
-    (typing([("aac(6')-Ib-cr.v2", "flq")]), ["Amikacin", "Ampicillin", "Ciprofloxacin"]),
+    (typing([("aac(6')-Ib-cr.v2", "flq")]), ["Ampicillin"]),
+    (typing([("aac(6')-Ib-cr.v2", "agly"), ("aac(6')-Ib-cr.v2", "flq")]), ["Ampicillin"]),
+    (typing([("aac(6')-Ib'.v1", "agly")]), ["Amikacin", "Ampicillin"]),
+    (typing([("aac(6')-Ib'.v1*", "agly")]), ["Amikacin", "Ampicillin"]),
+    (typing([("qnrB1.v2^", "flq")]), ["Ampicillin", "Ciprofloxacin"]),
+    (typing([("aac(6')-Ib-cr.v2", "flq"), ("qnrS1", "flq")]), ["Ampicillin", "Ciprofloxacin"]),
     (typing(mutations=[("GyrA", "p.Ser83Ile")]), ["Ampicillin", "Ciprofloxacin"]),
     (typing(mutations=[("MgrB", "-62%")]), ["Ampicillin", "Colistin"]),
-    (typing([("sul1", "sul")]), ["Ampicillin", "Trimethoprim-Sulfamethoxazole"]),
+    (typing([("sul1", "sul")]), ["Ampicillin"]),
+    (typing([("dfrA14.v2*", "tmt")]), ["Ampicillin", "Trimethoprim-Sulfamethoxazole"]),
+    (typing([("sul2", "sul"), ("dfrA12", "tmt")]), ["Ampicillin", "Trimethoprim-Sulfamethoxazole"]),
     (typing(esbl="CTX-M-15"), ["Ampicillin", "Cefepime", "Cefotaxime", "Ceftazidime", "Piperacillin-Tazobactam"]),
     (typing(mutations=[("OmpK35", "-25%"), ("OmpK36", "GD")], esbl="CTX-M-15"),
+     ["Ampicillin", "Cefepime", "Cefotaxime", "Ceftazidime", "Piperacillin-Tazobactam"]),
+    (typing(mutations=[("OmpK35", "p.Ala207fs"), ("OmpK36", "p.134_135insGlyAsp")], esbl="CTX-M-15"),
+     ["Ampicillin", "Cefepime", "Cefotaxime", "Ceftazidime", "Piperacillin-Tazobactam"]),
+    (typing(mutations=[("OmpK35", "p.Ala207fs"), ("OmpK36", "p.Ala183fs")], esbl="CTX-M-15"),
      ["Ampicillin", "Cefepime", "Cefotaxime", "Ceftazidime", "Meropenem", "Piperacillin-Tazobactam"]),
     (typing(carbapenemase="KPC-2"),
      ["Amoxicillin-Clavulanate", "Ampicillin", "Cefepime", "Cefotaxime", "Ceftazidime", "Meropenem",
@@ -90,3 +101,13 @@ def resistant(panel):
 ])
 def test_panel_prediction_table(data, expected):
     assert resistant(predict_panel(data)) == expected
+
+
+def test_unpolished_assembly_withholds_indel_mutations():
+    data = typing(mutations=[("GyrA", "p.Ser83Ile"), ("ParC", "p.Ser80Ile"), ("MgrB", "p.Lys2fs"),
+                             ("OmpK35", "c.C417del"), ("OmpK36", "p.134_135insGlyAsp"), ("PmrB", "-62%")])
+    kept, withheld = withhold_indel_mutations(data)
+    assert withheld == 4
+    assert [m["mutation"] for m in kept["resistance"]["point_mutations"]] == ["p.Ser83Ile", "p.Ser80Ile"]
+    assert len(data["resistance"]["point_mutations"]) == 6
+    assert resistant(predict_panel(kept)) == ["Ampicillin", "Ciprofloxacin"]

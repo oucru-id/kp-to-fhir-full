@@ -85,7 +85,7 @@ DRUG_LOINC = {
     "Amoxicillin-Clavulanate": "18861-5",
     "Piperacillin-Tazobactam": "18970-4",
     "Cefotaxime": "18876-3",
-    "Ceftazidime": "18879-7",
+    "Ceftazidime": "18893-8",
     "Cefepime": "18879-7",
     "Meropenem": "18943-1",
     "Ciprofloxacin": "18906-8",

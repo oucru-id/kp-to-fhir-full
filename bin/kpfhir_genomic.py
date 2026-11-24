@@ -12,7 +12,7 @@ from collections import defaultdict
 from kpfhir_common import (SOURCE_REPOSITORY, assembly_sample_id, bundle_id, fhir_id, full_url, now, now_iso,
                            point_references_at_entries, sanitize_id, today_compact, xhtml_text)
 from kpfhir_profiles import get_profile
-from kpfhir_resistance import classify_resistance_profile, predict_panel
+from kpfhir_resistance import classify_resistance_profile, predict_panel, withhold_indel_mutations
 from kpfhir_terminology import (AMINO_ACIDS, CGMLST_NCS, COLISTIN_MUTATION_GENES, CS_KP_PLASMID,
                                 CS_PIPELINE_PROPERTY, GENE_DESCRIPTIONS, GENOMIC_LOCATION_CODE, HGVS,
                                 LOCATION_CODINGS, LOINC, PLASMID_ANALYSIS_CODE, PLASMID_CODE,
@@ -874,6 +874,12 @@ def main(argv=None):
         sys.exit(f"ERROR: {exc}")
     if args.cgmlst_file and cgmlst_info is None:
         print(f"WARNING: no cgMLST row for {args.sample_id} in {args.cgmlst_file}")
+    if qc_data and qc_data.get('polishing') == 'failed':
+        typing_data, withheld = withhold_indel_mutations(typing_data)
+        qc_data = {**qc_data, 'warnings': list(qc_data.get('warnings') or []) + [
+            f"{withheld} frameshift, insertion or deletion mutation call(s) withheld because the assembly is "
+            "unpolished"]}
+        print(f"WARNING: {args.sample_id}: unpolished assembly, {withheld} indel-type mutation call(s) withheld")
 
     records = build_records(ctx, typing_data, plasmid_data, qc_data, cgmlst_info)
     observations = [obs for _kind, obs in records]

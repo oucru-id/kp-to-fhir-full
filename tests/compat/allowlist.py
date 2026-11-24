@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "bin"))
-from kpfhir_terminology import CS_KP_PLASMID, CS_OBSERVATION_CODE  
+from kpfhir_terminology import CS_KP_PLASMID, CS_OBSERVATION_CODE, DRUG_LOINC
 
 V1_PLASMID_CS = "https://kp-pipeline-docs.readthedocs.io/fhir/CodeSystem/kp-plasmid"
 V1_QC_CS = "https://kp-pipeline-docs.readthedocs.io/fhir/CodeSystem/kp-qc"
@@ -51,6 +51,14 @@ def _patient(resource):
     resource["identifier"] = identifiers
 
 
+def _panel_codes(resource):
+    for component in resource.get("component", []):
+        if component.get("code", {}).get("text") == "Ceftazidime":
+            for coding in component["code"].get("coding", []):
+                if coding.get("system") == "http://loinc.org":
+                    coding["code"] = DRUG_LOINC["Ceftazidime"]
+
+
 def expected_v2(v1_bundle):
     bundle = copy.deepcopy(v1_bundle)
     bundle = _replace_strings(bundle, "https://varnomen.hgvs.org", "http://varnomen.hgvs.org")
@@ -78,6 +86,8 @@ def expected_v2(v1_bundle):
                 del resource["receivedTime"]
             if resource.get("collection", {}).get("collectedDateTime") == TIMESTAMP:
                 del resource["collection"]["collectedDateTime"]
+        elif rtype == "Observation":
+            _panel_codes(resource)
         elif rtype == "ServiceRequest":
             resource["subject"].pop("display", None)
         elif rtype == "Patient":

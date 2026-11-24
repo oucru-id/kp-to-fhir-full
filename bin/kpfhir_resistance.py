@@ -22,7 +22,8 @@ AMINOGLYCOSIDE_PROFILES = {
     "aac(6')-i": {'Gentamicin': False, 'Amikacin': True},
     "aac(6')-ia": {'Gentamicin': False, 'Amikacin': True},
     "aac(6')-ib": {'Gentamicin': False, 'Amikacin': True},
-    "aac(6')-ib-cr": {'Gentamicin': False, 'Amikacin': True},
+    "aac(6')-ib-cr": {'Gentamicin': False, 'Amikacin': False},
+    "aac(6')-ib-prime": {'Gentamicin': False, 'Amikacin': True},
     "aac(6')-ii": {'Gentamicin': True, 'Amikacin': True},
     "aac(6')-30": {'Gentamicin': False, 'Amikacin': True},
     "ant(2'')-i": {'Gentamicin': True, 'Amikacin': False},
@@ -58,6 +59,7 @@ AMINOGLYCOSIDE_PROFILES = {
 
 
 def normalise_aminoglycoside_name(name):
+    name = re.sub(r"(?i)ib'(?=$|[.\-_*^?])", "ib-prime", name)
     for char in "()'^*?":
         name = name.replace(char, '')
     return name.lower().replace('_', '-').replace(' ', '-')
@@ -66,6 +68,22 @@ def normalise_aminoglycoside_name(name):
 _AMINOGLYCOSIDE_LOOKUP = sorted(
     ((normalise_aminoglycoside_name(name), profile) for name, profile in AMINOGLYCOSIDE_PROFILES.items()),
     key=lambda item: len(item[0]), reverse=True)
+
+
+INDEL_MUTATION = re.compile(r"fs|del|ins|dup|%|\$|\*|Ter\b", re.IGNORECASE)
+
+
+def withhold_indel_mutations(typing_data):
+    resistance = dict(typing_data.get('resistance', {}))
+    mutations = resistance.get('point_mutations', [])
+    kept = [m for m in mutations if not INDEL_MUTATION.search(str(m.get('mutation', '')))]
+    resistance['point_mutations'] = kept
+    return {**typing_data, 'resistance': resistance}, len(mutations) - len(kept)
+
+
+def is_ompk36_loop3_insertion(mutation):
+    text = str(mutation).strip()
+    return 'ins' in text.lower() or text.upper() in ('GD', 'TD')
 
 
 def predict_panel(typing_data, log=None):
@@ -79,7 +97,7 @@ def predict_panel(typing_data, log=None):
     has_ompk35 = has_ompk36 = False
     has_flq_gene = has_flq_mutation = False
     has_col_gene = has_col_mutation = False
-    has_trimethoprim = has_sulfonamide = False
+    has_trimethoprim = False
 
     for gene in resistance.get('detailed_resistance', []):
         gene_name = gene.get('gene', '').lower().replace('^', '').strip()
@@ -99,15 +117,10 @@ def predict_panel(typing_data, log=None):
                 if log:
                     log(f"Unknown aminoglycoside gene {gene_name} - marking Gentamicin resistant (conservative)")
 
-        if drug_class == 'fluoroquinolone' or 'qnr' in gene_name:
+        if (drug_class == 'fluoroquinolone' or 'qnr' in gene_name) and 'ib-cr' not in gene_name:
             has_flq_gene = True
-        if "aac(6')-ib-cr" in gene_name or 'aac(6)-ib-cr' in gene_name:
-            has_flq_gene = True
-            drug_status["Amikacin"] = "Resistant"
         if 'trimethoprim' in drug_class or gene_name.startswith('dfr'):
             has_trimethoprim = True
-        if 'sulfonamide' in drug_class or gene_name.startswith('sul'):
-            has_sulfonamide = True
         if 'colistin' in drug_class or gene_name.startswith('mcr'):
             has_col_gene = True
 
@@ -117,7 +130,7 @@ def predict_panel(typing_data, log=None):
             has_flq_mutation = True
         if gene == 'OmpK35':
             has_ompk35 = True
-        if gene == 'OmpK36':
+        if gene == 'OmpK36' and not is_ompk36_loop3_insertion(mut.get('mutation', '')):
             has_ompk36 = True
         if gene in COLISTIN_MUTATION_GENES:
             has_col_mutation = True
@@ -139,7 +152,7 @@ def predict_panel(typing_data, log=None):
         drug_status["Ciprofloxacin"] = "Resistant"
     if has_col_gene or has_col_mutation:
         drug_status["Colistin"] = "Resistant"
-    if has_trimethoprim or has_sulfonamide:
+    if has_trimethoprim:
         drug_status["Trimethoprim-Sulfamethoxazole"] = "Resistant"
     return drug_status
 

@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.1]
+
+- **Amikacin.** `aac(6')-Ib-cr` no longer predicts amikacin resistance.
+- **Ciprofloxacin.** `aac(6')-Ib-cr` alone no longer predicts resistance, including when Kleborate
+  lists it as a fluoroquinolone gene.
+- **Meropenem.** The porin rule (OmpK35 and OmpK36 changes with an ESBL) now needs OmpK36 to be
+  truncated; the OmpK36 loop-3 insertion (`p.134_135insGlyAsp`, `GD`, `TD`) no longer counts.
+- **Trimethoprim-sulfamethoxazole** needs a `dfr` gene; a `sul` gene alone no
+  longer predicts resistance.
+- **Ceftazidime** uses LOINC 18893-8 (Ceftazidime [Susceptibility]).
+- **Medaka polishing works in containers.**.
+- **Unpolished Nanopore assemblies.** When medaka fails, the sequencing QC status is `FAIL`, and
+  frameshift, insertion and deletion mutation calls are withheld from the panel and the variant
+  Observations, with a QC warning giving their number. Base-call errors in unpolished assemblies
+  produced false porin, MgrB and PmrB truncations.
+
 ## [2.0.0]
 
 - **Inputs.** `--input samplesheet.csv` (`sample,platform,fastq_1,fastq_2,fasta`) is the main
