@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.0.1]
+
+Panel rules revised against two benchmark datasets: Long et al. 2017 (486 Houston isolates passing
+assembly QC, MICs read with current CLSI breakpoints) and Tamma et al. 2019 (40 isolates, broth
+microdilution).
+
+- **Amikacin.** `aac(6')-Ib-cr` no longer predicts amikacin resistance (8 of 82 carriers resistant).
+  `aac(6')-Ib'` is now matched explicitly and still predicts amikacin resistance (120 of 127
+  resistant); before, it only matched because the prime was stripped. Houston specificity 75% to
+  97%, sensitivity 91% to 86%.
+- **Ciprofloxacin.** `aac(6')-Ib-cr` alone no longer predicts resistance, including when Kleborate
+  lists it as a fluoroquinolone gene (1 of 6 resistant). `qnr` genes and QRDR mutations still do.
+  Houston specificity 87% to 98%.
+- **Meropenem.** The porin rule (OmpK35 and OmpK36 changes with an ESBL) now needs OmpK36 to be
+  truncated; the OmpK36 loop-3 insertion (`p.134_135insGlyAsp`, `GD`, `TD`) no longer counts
+  (7 of 54 resistant). Houston specificity 77% to 92%, sensitivity 95% to 91%.
+- **Trimethoprim-sulfamethoxazole** needs a `dfr` gene; a `sul` gene alone (9 of 24 resistant) no
+  longer predicts resistance. Houston specificity 70% to 83%; Tamma 79% to 93%.
+- **Ceftazidime** uses LOINC 18893-8 (Ceftazidime [Susceptibility]); it shared 18879-7 with
+  cefepime.
+- **Unpolished Nanopore assemblies.** When medaka fails, the sequencing QC status is `FAIL`, and
+  frameshift, insertion and deletion mutation calls are withheld from the panel and the variant
+  Observations, with a QC warning giving their number. Base-call errors in unpolished assemblies
+  produced false porin, MgrB and PmrB truncations.
+
 ## [2.0.0]
 
 - **Inputs.** `--input samplesheet.csv` (`sample,platform,fastq_1,fastq_2,fasta`) is the main
